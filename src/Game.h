@@ -13,9 +13,9 @@ namespace hlct {
     class Helmet {
         ofImage img;
         ofVec2f position;
-        bool    alive;
-        bool    touching;
         float   gravity;
+        float   scale;
+        bool    alive;
         bool    win;
         ofRectangle intersectRect;
         
@@ -29,39 +29,45 @@ namespace hlct {
             
             alive = true;
             img.setFromPixels(helmetPixels);
-            float scl = ofClamp(ofRandomuf(), 0.6f, 1.f);
-            img.resize(img.getWidth()*scl, img.getHeight()*scl);
-            touching = false;
-            
-            intersectRect.set(position, img.getWidth(), img.getHeight());
+            scale = ofClamp(ofRandomuf(), 0.6f, 1.f);
+            win = false;
         }
         void update(const ofVec2f& heroPos){
-            if (alive && position.y <= ofGetHeight() - img.getHeight()) {
-                if (!touching) {
+            if (alive && position.y <= ofGetHeight() - img.getHeight()*scale) {
+                intersectRect.set(position, img.getWidth()*scale, img.getHeight()*scale);
+                if (!win) {
                     position.y -= gravity;
-                    intersectRect.set(position, img.getWidth(), img.getHeight());
                 } else {
-                    position.x = heroPos.x - img.getWidth()/2;
-                    position.y = heroPos.y - img.getHeight()*1.5;
+                    position.x = heroPos.x - img.getWidth()*scale/2;
+                    position.y = heroPos.y - img.getHeight()*scale*1.5;
                 }
             } else {
                 alive = false;
             }
+            if (win) {
+                scale = 0.5f;
+            }
         }
         void draw(){
-            img.draw(position);
+            img.draw(position, img.getWidth()*scale, img.getHeight()*scale);
         }
-        bool isTouching(const ofVec2f& target){
-            if (!win) {
-                touching = intersectRect.inside(target);
-                win = touching;
-            }
-            return touching;
+        
+        const ofVec2f& getPosition() {
+            return position;
+        }
+        float getWidth() {
+            return img.getWidth()*scale;
+        }
+        float getHeight() {
+            return img.getHeight()*scale;
         }
         bool isAlive() {
             return alive;
         }
-        bool isWin() {
+        bool isWin(const ofVec2f& pos) {
+            if (!win) {
+                win = intersectRect.inside(pos);
+            }
             return win;
         }
     };
@@ -161,7 +167,6 @@ namespace hlct {
                     float dt = 1.f/60.f;
                     gameTimer.update(dt);
                     currentTime.set(gameTimer.getCurrentValue());
-                    int bAddHelmet = (int)currentTime % 10 == 0;
                     
                     if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH){
                         endGame();
@@ -172,15 +177,17 @@ namespace hlct {
                         for (auto h : helmets){
                             h->update(heroPos);
                         }
+                        int wi = 0;
                         for (auto h : winHelmets){
-                            h->update(heroPos);
+                            h->update(ofVec2f(heroPos.x, heroPos.y - h->getHeight()*0.25*wi));
+                            wi++;
                         }
                         for (int i=0; i<helmets.size(); ++i){
                             shared_ptr<Helmet> h = helmets[i];
                             if (!h->isAlive()) {
                                 helmets.erase(helmets.begin() + i);
                             } else {
-                                if (h->isTouching(heroPos)) {
+                                if (h->isWin(heroPos)) {
                                     winHelmets.push_back(h);
                                     helmets.erase(helmets.begin() + i);
                                 }
