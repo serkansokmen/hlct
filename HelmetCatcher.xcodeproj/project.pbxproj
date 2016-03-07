@@ -152,7 +152,11 @@
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		E5F13FDAE691A5804F4D2DDB /* libfreenect.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = libfreenect.h; path = ../../../addons/ofxKinect/libs/libfreenect/include/libfreenect.h; sourceTree = SOURCE_ROOT; };
-		E6122CD01C8CDB3900AAF30C /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		E6122D941C8DF1AA00AAF30C /* Helmet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Helmet.h; sourceTree = "<group>"; };
+		E6122D951C8DF1D200AAF30C /* GameState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameState.h; sourceTree = "<group>"; };
+		E6122D961C8DF21200AAF30C /* GameAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameAsset.h; sourceTree = "<group>"; };
+		E6122D971C8DF24800AAF30C /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		E6122D981C8DF32E00AAF30C /* LivesDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LivesDisplay.h; sourceTree = "<group>"; };
 		E62884AEE08652DCB3199A54 /* libfreenect_registration.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = libfreenect_registration.h; path = ../../../addons/ofxKinect/libs/libfreenect/include/libfreenect_registration.h; sourceTree = SOURCE_ROOT; };
 		E63D2B641C766C9C007DED53 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		E69C0CD31C6BAD0F00817555 /* Expression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Expression.cpp; sourceTree = "<group>"; };
@@ -456,8 +460,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				E6122CD01C8CDB3900AAF30C /* Game.h */,
 				E63D2B641C766C9C007DED53 /* Constants.h */,
+				E6122D931C8DF1AA00AAF30C /* hlct */,
 				E6B49B931C7BBCD30069DE70 /* tracker */,
 			);
 			path = src;
@@ -470,6 +474,18 @@
 				E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */,
 			);
 			name = openFrameworks;
+			sourceTree = "<group>";
+		};
+		E6122D931C8DF1AA00AAF30C /* hlct */ = {
+			isa = PBXGroup;
+			children = (
+				E6122D971C8DF24800AAF30C /* Game.h */,
+				E6122D941C8DF1AA00AAF30C /* Helmet.h */,
+				E6122D951C8DF1D200AAF30C /* GameState.h */,
+				E6122D961C8DF21200AAF30C /* GameAsset.h */,
+				E6122D981C8DF32E00AAF30C /* LivesDisplay.h */,
+			);
+			path = hlct;
 			sourceTree = "<group>";
 		};
 		E69C0CD11C6BAD0F00817555 /* ofxFaceTracker */ = {

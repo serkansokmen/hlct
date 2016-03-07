@@ -6,7 +6,7 @@
 #include "ofxCameraSaveLoad.h"
 #include "ofxAnimatableOfPoint.h"
 #include "ColorTracker.h"
-#include "Game.h"
+#include "hlct/Game.h"
 
 
 class ofApp : public ofBaseApp{
@@ -42,7 +42,7 @@ public:
     ofxKinect               kinect;
     unique_ptr<ofPixels>    trackPixels;
     tracker::ColorTracker   colorTracker;
-    unique_ptr<ofxAnimatableOfPoint>     trackAveragePosAnim;
+    unique_ptr<ofxAnimatableOfPoint>     heroPosAnim;
     
     hlct::Game              game;
     ofImage                 bgImg;

@@ -38,13 +38,12 @@ void ofApp::setup(){
     gui.add(btnStart.setup("New Game"));
     gui.add(btnAddHelmet.setup("Add Random Helmet"));
     
-    
-    trackAveragePosAnim = unique_ptr<ofxAnimatableOfPoint>(new ofxAnimatableOfPoint);
-    trackAveragePosAnim->setDuration(0.1);
-    trackAveragePosAnim->setPosition(ofVec2f(ofGetWidth()/2, ofGetHeight() - 200));
-    trackAveragePosAnim->setRepeatType(PLAY_ONCE);
-    trackAveragePosAnim->setRepeatTimes(0);
-    trackAveragePosAnim->setCurve(EASE_OUT);
+    heroPosAnim = unique_ptr<ofxAnimatableOfPoint>(new ofxAnimatableOfPoint);
+    heroPosAnim->setDuration(0.1);
+    heroPosAnim->setPosition(ofVec2f(ofGetWidth()/2, ofGetHeight() - 240));
+    heroPosAnim->setRepeatType(PLAY_ONCE);
+    heroPosAnim->setRepeatTimes(0);
+    heroPosAnim->setCurve(EASE_OUT);
     
     bUseGrabber.addListener(this, &ofApp::toggleGrabber);
     bUsePlayer.addListener(this, &ofApp::togglePlayer);
@@ -58,11 +57,11 @@ void ofApp::setup(){
 void ofApp::update(){
     
     float dt = 1.0f / 60.0f;
-    trackAveragePosAnim->update(dt);
+    heroPosAnim->update(dt);
     
-    game.update(trackAveragePosAnim->getCurrentPosition());
+    game.update(heroPosAnim->getCurrentPosition());
 //    if (game.isRunning()){
-//        game.checkHelmetTouch(trackAveragePosAnim->getCurrentPosition());
+//        game.checkHelmetTouch(heroPosAnim->getCurrentPosition());
 //    }
     
     if (bUseGrabber){
@@ -102,8 +101,8 @@ void ofApp::update(){
                 average->x = ofNormalize(average->x, 0, GRABBER_WIDTH) * ofGetWidth();
                 average->y = ofNormalize(average->y, 0, GRABBER_HEIGHT) * ofGetHeight();
                 ofLogVerbose("Mapped Average: " + ofToString(*average));
-                if (!trackAveragePosAnim->isOrWillBeAnimating())
-                    trackAveragePosAnim->animateTo(ofVec2f(average->x, trackAveragePosAnim->getCurrentPosition().y));
+                if (!heroPosAnim->isOrWillBeAnimating())
+                    heroPosAnim->animateTo(ofVec2f(average->x, heroPosAnim->getCurrentPosition().y));
             }
         }
     }
@@ -157,7 +156,7 @@ void ofApp::draw(){
     
     if (game.isRunning()) {
         ofSetColor(ofColor::red);
-        ofDrawCircle(trackAveragePosAnim->getCurrentPosition(), 20);
+        ofDrawCircle(heroPosAnim->getCurrentPosition(), 20);
         ofSetColor(ofColor::white);
     }
     
@@ -205,7 +204,7 @@ void ofApp::mousePressed(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
     if (!isTracking()) {
-        trackAveragePosAnim->animateTo(ofVec2f(x, trackAveragePosAnim->getCurrentPosition().y));
+        heroPosAnim->animateTo(ofVec2f(x, heroPosAnim->getCurrentPosition().y));
     }
 }
 

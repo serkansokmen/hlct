@@ -2,129 +2,14 @@
 
 #include "ofMain.h"
 #include "ofxAnimatableFloat.h"
+#include "hlct/Helmet.h"
+#include "hlct/GameState.h"
+#include "hlct/GameAsset.h"
+#include "hlct/LivesDisplay.h"
+#include "Constants.h"
 
 
-#define HLCT_LIVES                  3
-#define HLCT_HELMET_SECTION_COUNT   4
-#define HLCT_MAX_CATCH              10
-
-
-namespace hlct {
-    
-    class Helmet {
-        ofImage img;
-        ofVec2f position;
-        float   gravity;
-        float   scale;
-        bool    alive;
-        bool    win;
-        ofRectangle intersectRect;
-        
-    public:
-        void setup(const ofPixels& helmetPixels, const int& sectionIndex){
-            
-            gravity = ofRandom(-5.f, -4.f);
-            float sectionWidth = ofGetWidth() / HLCT_HELMET_SECTION_COUNT;
-            float sectionX = ofRandom(0, sectionWidth);
-            position.x = ofClamp(sectionX + sectionWidth * sectionIndex, 100, ofGetWidth()-100);
-            
-            alive = true;
-            img.setFromPixels(helmetPixels);
-//            scale = ofClamp(ofRandomuf(), 0.6f, 1.f);
-            scale = 0.5f;
-            win = false;
-        }
-        void update(const ofVec2f& heroPos){
-            if (alive && position.y <= ofGetHeight() - img.getHeight()*scale) {
-                intersectRect.set(position, img.getWidth()*scale, img.getHeight()*scale);
-                if (!win) {
-                    position.y -= gravity;
-                } else {
-                    position.x = heroPos.x - img.getWidth()*scale*0.5;
-                    position.y = heroPos.y - img.getHeight()*scale*1.5;
-                }
-            } else {
-                alive = false;
-            }
-            if (win) {
-                scale = 0.5f;
-            }
-        }
-        void draw(){
-            img.draw(position, img.getWidth()*scale, img.getHeight()*scale);
-        }
-        
-        const ofVec2f& getPosition() {
-            return position;
-        }
-        float getWidth() {
-            return img.getWidth()*scale;
-        }
-        float getHeight() {
-            return img.getHeight()*scale;
-        }
-        bool isAlive() {
-            return alive;
-        }
-        bool isWin(const ofVec2f& pos) {
-            if (!win) {
-                win = intersectRect.inside(pos);
-            }
-            return win;
-        }
-    };
-    
-    
-    
-    enum GameState {
-        GAME_STATE_TITLE = 0,
-        GAME_STATE_GAME = 1,
-        GAME_STATE_END_WIN = 2,
-        GAME_STATE_END_LOOSE = 3,
-    };
-    
-    
-    
-    
-    class GameAsset {
-        ofImage title0, title1, win, loose;
-        shared_ptr<ofImage> img;
-    public:
-        void setup(){
-            title0.load("game/title_0.png");
-            title1.load("game/title_1.png");
-            win.load("game/win.png");
-            loose.load("game/loose.png");
-            img = shared_ptr<ofImage>(new ofImage);
-        }
-        void draw(const GameState& state){
-            switch (state) {
-                case GAME_STATE_TITLE: {
-                    int seconds = (int)(ofGetElapsedTimeMillis() / 2000);
-                    if (seconds % 2 == 0) {
-                        *img = title0;
-                    } else {
-                        *img = title1;
-                    }
-                    break;
-                }
-                case GAME_STATE_END_WIN:
-                    *img = win;
-                    break;
-                case GAME_STATE_END_LOOSE:
-                    *img = loose;
-                    break;
-                default:
-                    break;
-            }
-            
-            if (state != GAME_STATE_GAME){
-                img->draw(0, 0);
-            }
-        }
-    };
-
-    
+namespace hlct {    
     class Game {
         
         vector<shared_ptr<Helmet>>  helmets;
@@ -133,8 +18,9 @@ namespace hlct {
         
         GameAsset                   gameAsset;
         GameState                   state;
+        LivesDisplay                livesDisplay;
+        
         ofxAnimatableFloat          gameTimer;
-        ofVec2f                     posLives;
         float                       startTime;
         int                         livesLeft;
         bool                        timerEnd;
@@ -142,30 +28,6 @@ namespace hlct {
         
         inline bool canAddHelmet(){
             return helmets.size() == 0;
-        }
-        
-        inline void drawLives(){
-            
-            float w = helmetImg.getWidth()*0.5;
-            float h = helmetImg.getHeight()*0.5;
-
-            ofPushMatrix();
-            ofPushStyle();
-            ofTranslate(posLives);
-            for (int i=0; i<HLCT_LIVES; i++){
-                ofPushMatrix();
-                ofTranslate(w*i, 0);
-                if (i < livesLeft) {
-                    ofSetColor(ofColor::white, 200);
-                    helmetImg.draw(0, 0, w, h);
-                } else {
-                    ofSetColor(ofColor::white, 200);
-                    helmetOutlineImg.draw(0, 0, w, h);
-                }
-                ofPopMatrix();
-            }
-            ofPopStyle();
-            ofPopMatrix();
         }
         
     public:
@@ -183,13 +45,21 @@ namespace hlct {
             helmets.clear();
             state = GAME_STATE_TITLE;
             
-            posLives.set(ofGetWidth() - helmetOutlineImg.getWidth()*HLCT_LIVES*0.5 - 70, 30);
-            
             params.setName("Game");
             params.add(endTime.set("End Time", 2, 2, 100));
             params.add(currentTime.set("Curent Time", 0.f, 0.f, 100.f));
             params.add(score.set("Score", 0, 0, HLCT_MAX_CATCH));
             params.add(helmetSection.set("Helmet Section", 0, 0, HLCT_HELMET_SECTION_COUNT));
+            
+            float x = ofGetWidth() - helmetOutlineImg.getWidth()*HLCT_LIVES*0.5 - 70;
+            float y = 30;
+            float w = helmetImg.getWidth()*0.5;
+            float h = helmetImg.getHeight()*0.5;
+            
+            livesDisplay.setup(ofRectangle(x, y, w, h),
+                               HLCT_LIVES,
+                               "game/helmet.png",
+                               "game/helmet_outline.png");
         };
         
         void update(const ofVec2f& heroPos){
@@ -247,7 +117,7 @@ namespace hlct {
                 for (auto h : winHelmets){
                     h->draw();
                 }
-                drawLives();
+                livesDisplay.draw(livesLeft);
             }
         };
         
@@ -297,5 +167,4 @@ namespace hlct {
         ofParameter<int>    score;
         ofParameter<int>    helmetSection;
     };
-    
 }
