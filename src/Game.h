@@ -4,6 +4,10 @@
 #include "ofxAnimatableFloat.h"
 
 
+#define HLCT_HELMET_SECTION_COUNT   4
+#define HLCT_MAX_CATCH              10
+
+
 namespace hlct {
     
     class Helmet {
@@ -12,12 +16,17 @@ namespace hlct {
         bool    alive;
         bool    touching;
         float   gravity;
+        bool    win;
         ofRectangle intersectRect;
         
     public:
-        void setup(const ofPixels& helmetPixels){
+        void setup(const ofPixels& helmetPixels, const int& sectionIndex){
+            
             gravity = ofRandom(-5.f, -4.f);
-            position.x = ofRandomWidth();
+            float sectionWidth = ofGetWidth() / HLCT_HELMET_SECTION_COUNT;
+            float sectionX = ofRandom(0, sectionWidth);
+            position.x = sectionX + sectionWidth * sectionIndex;
+            
             alive = true;
             img.setFromPixels(helmetPixels);
             float scl = ofClamp(ofRandomuf(), 0.6f, 1.f);
@@ -26,35 +35,34 @@ namespace hlct {
             
             intersectRect.set(position, img.getWidth(), img.getHeight());
         }
-        void update(){
+        void update(const ofVec2f& heroPos){
             if (alive && position.y <= ofGetHeight() - img.getHeight()) {
                 if (!touching) {
                     position.y -= gravity;
                     intersectRect.set(position, img.getWidth(), img.getHeight());
+                } else {
+                    position.x = heroPos.x - img.getWidth()/2;
+                    position.y = heroPos.y - img.getHeight()*1.5;
                 }
             } else {
                 alive = false;
             }
         }
         void draw(){
-            if (position.y <= ofGetHeight() - img.getHeight()) {
-                if (touching)
-                    ofSetColor(ofColor::green);
-                else
-                    ofSetColor(ofColor::white);
-            } else {
-                ofSetColor(ofColor::red);
-            }
             img.draw(position);
         }
-        bool checkTargetIntersects(const ofVec2f& target){
-            if (!touching) {
+        bool isTouching(const ofVec2f& target){
+            if (!win) {
                 touching = intersectRect.inside(target);
+                win = touching;
             }
             return touching;
         }
         bool isAlive() {
             return alive;
+        }
+        bool isWin() {
+            return win;
         }
     };
     
@@ -92,8 +100,6 @@ namespace hlct {
                     }
                     break;
                 }
-                case GAME_STATE_GAME:
-                    break;
                 case GAME_STATE_END_WIN:
                     *img = win;
                     break;
@@ -109,13 +115,12 @@ namespace hlct {
             }
         }
     };
-    
-    
-    
+
     
     class Game {
         
         vector<shared_ptr<Helmet>>  helmets;
+        vector<shared_ptr<Helmet>>  winHelmets;
         ofImage                     helmetImg;
         
         GameAsset                   gameAsset;
@@ -123,20 +128,10 @@ namespace hlct {
         ofxAnimatableFloat          gameTimer;
         float                       startTime;
         bool                        timerEnd;
+        bool                        bTouchChecked;
         
-        inline bool helmetExists(){
-            bool exists = false;
-            if (helmets.size() < 1) {
-                return exists;
-            } else {
-                bool yes = false;
-                for (auto h : helmets) {
-                    if (!yes)
-                        yes = h.get()->isAlive();
-                }
-                exists = yes;
-            }
-            return exists;
+        inline bool canAddHelmet(){
+            return helmets.size() == 0;
         }
         
     public:
@@ -154,47 +149,47 @@ namespace hlct {
             state = GAME_STATE_TITLE;
             
             params.setName("Game");
-            params.add(endTime.set("End Time", 2, 2, 25));
-            params.add(currentTime.set("Curent Time", 0.f, 0.f, 25.f));
-            params.add(score.set("Score", 0, 0, 3));
+            params.add(endTime.set("End Time", 2, 2, 100));
+            params.add(currentTime.set("Curent Time", 0.f, 0.f, 100.f));
+            params.add(score.set("Score", 0, 0, HLCT_MAX_CATCH));
+            params.add(helmetSection.set("Helmet Section", 0, 0, HLCT_HELMET_SECTION_COUNT));
         };
         
         void update(const ofVec2f& heroPos){
             switch (state) {
-                case GAME_STATE_TITLE:
-                    break;
                 case GAME_STATE_GAME: {
                     float dt = 1.f/60.f;
                     gameTimer.update(dt);
                     currentTime.set(gameTimer.getCurrentValue());
+                    int bAddHelmet = (int)currentTime % 10 == 0;
                     
-                    if (gameTimer.getCurrentValue() >= endTime || score == 3){
+                    if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH){
                         endGame();
                     } else {
-                        if (!helmetExists()) {
+                        if (canAddHelmet()) {
                             addRandomHelmet();
                         }
-                        int wins = 0;
+                        for (auto h : helmets){
+                            h->update(heroPos);
+                        }
+                        for (auto h : winHelmets){
+                            h->update(heroPos);
+                        }
                         for (int i=0; i<helmets.size(); ++i){
                             shared_ptr<Helmet> h = helmets[i];
-                            if (h->checkTargetIntersects(heroPos)) {
-                                wins++;
-                            }
-                            
-                            if (h.get()->isAlive()){
-                                h.get()->update();
-                            } else {
+                            if (!h->isAlive()) {
                                 helmets.erase(helmets.begin() + i);
+                            } else {
+                                if (h->isTouching(heroPos)) {
+                                    winHelmets.push_back(h);
+                                    helmets.erase(helmets.begin() + i);
+                                }
                             }
                         }
-                        score = wins;
+                        score = winHelmets.size();
                     }
                     break;
                 }
-                case GAME_STATE_END_WIN:
-                    break;
-                case GAME_STATE_END_LOOSE:
-                    break;
                 default:
                     break;
             }
@@ -205,16 +200,15 @@ namespace hlct {
             gameAsset.draw(state);
             
             switch (state) {
-                case GAME_STATE_TITLE:
-                    break;
                 case GAME_STATE_GAME:
+                    ofSetColor(ofColor::white);
                     for (auto h : helmets){
-                        h.get()->draw();
+                        h->draw();
                     }
-                    break;
-                case GAME_STATE_END_WIN:
-                    break;
-                case GAME_STATE_END_LOOSE:
+                    ofSetColor(ofColor::green);
+                    for (auto h : winHelmets){
+                        h->draw();
+                    }
                     break;
                 default:
                     break;
@@ -229,17 +223,19 @@ namespace hlct {
             gameTimer.setCurve(LINEAR);
             
             helmets.clear();
+            winHelmets.clear();
             addRandomHelmet();
             
             gameTimer.animateFromTo(0, endTime);
             state = GAME_STATE_GAME;
             score = 0;
+            bTouchChecked = false;
         };
         
         void endGame(){
             timerEnd = true;
             startTime = ofGetElapsedTimeMillis();
-            if (score < 3) {
+            if (score < HLCT_MAX_CATCH) {
                 state = GAME_STATE_END_LOOSE;
             } else {
                 state = GAME_STATE_END_WIN;
@@ -249,7 +245,8 @@ namespace hlct {
         
         void addRandomHelmet(){
             shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
-            helmet.get()->setup(helmetImg.getPixels());
+            helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
+            helmet.get()->setup(helmetImg.getPixels(), helmetSection);
             helmets.push_back(helmet);
         }
         
@@ -261,6 +258,7 @@ namespace hlct {
         ofParameter<float>  currentTime;
         ofParameter<int>    endTime;
         ofParameter<int>    score;
+        ofParameter<int>    helmetSection;
     };
     
 }
