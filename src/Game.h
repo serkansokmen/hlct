@@ -4,6 +4,7 @@
 #include "ofxAnimatableFloat.h"
 
 
+#define HLCT_LIVES                  3
 #define HLCT_HELMET_SECTION_COUNT   4
 #define HLCT_MAX_CATCH              10
 
@@ -25,11 +26,12 @@ namespace hlct {
             gravity = ofRandom(-5.f, -4.f);
             float sectionWidth = ofGetWidth() / HLCT_HELMET_SECTION_COUNT;
             float sectionX = ofRandom(0, sectionWidth);
-            position.x = sectionX + sectionWidth * sectionIndex;
+            position.x = ofClamp(sectionX + sectionWidth * sectionIndex, 100, ofGetWidth()-100);
             
             alive = true;
             img.setFromPixels(helmetPixels);
-            scale = ofClamp(ofRandomuf(), 0.6f, 1.f);
+//            scale = ofClamp(ofRandomuf(), 0.6f, 1.f);
+            scale = 0.5f;
             win = false;
         }
         void update(const ofVec2f& heroPos){
@@ -38,7 +40,7 @@ namespace hlct {
                 if (!win) {
                     position.y -= gravity;
                 } else {
-                    position.x = heroPos.x - img.getWidth()*scale/2;
+                    position.x = heroPos.x - img.getWidth()*scale*0.5;
                     position.y = heroPos.y - img.getHeight()*scale*1.5;
                 }
             } else {
@@ -127,17 +129,43 @@ namespace hlct {
         
         vector<shared_ptr<Helmet>>  helmets;
         vector<shared_ptr<Helmet>>  winHelmets;
-        ofImage                     helmetImg;
+        ofImage                     helmetImg, helmetOutlineImg;
         
         GameAsset                   gameAsset;
         GameState                   state;
         ofxAnimatableFloat          gameTimer;
+        ofVec2f                     posLives;
         float                       startTime;
+        int                         livesLeft;
         bool                        timerEnd;
         bool                        bTouchChecked;
         
         inline bool canAddHelmet(){
             return helmets.size() == 0;
+        }
+        
+        inline void drawLives(){
+            
+            float w = helmetImg.getWidth()*0.5;
+            float h = helmetImg.getHeight()*0.5;
+
+            ofPushMatrix();
+            ofPushStyle();
+            ofTranslate(posLives);
+            for (int i=0; i<HLCT_LIVES; i++){
+                ofPushMatrix();
+                ofTranslate(w*i, 0);
+                if (i < livesLeft) {
+                    ofSetColor(ofColor::white, 200);
+                    helmetImg.draw(0, 0, w, h);
+                } else {
+                    ofSetColor(ofColor::white, 200);
+                    helmetOutlineImg.draw(0, 0, w, h);
+                }
+                ofPopMatrix();
+            }
+            ofPopStyle();
+            ofPopMatrix();
         }
         
     public:
@@ -151,8 +179,11 @@ namespace hlct {
             
             gameAsset.setup();
             helmetImg.load("game/helmet.png");
+            helmetOutlineImg.load("game/helmet_outline.png");
             helmets.clear();
             state = GAME_STATE_TITLE;
+            
+            posLives.set(ofGetWidth() - helmetOutlineImg.getWidth()*HLCT_LIVES*0.5 - 70, 30);
             
             params.setName("Game");
             params.add(endTime.set("End Time", 2, 2, 100));
@@ -168,7 +199,7 @@ namespace hlct {
                     gameTimer.update(dt);
                     currentTime.set(gameTimer.getCurrentValue());
                     
-                    if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH){
+                    if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0){
                         endGame();
                     } else {
                         if (canAddHelmet()) {
@@ -186,6 +217,7 @@ namespace hlct {
                             shared_ptr<Helmet> h = helmets[i];
                             if (!h->isAlive()) {
                                 helmets.erase(helmets.begin() + i);
+                                livesLeft--;
                             } else {
                                 if (h->isWin(heroPos)) {
                                     winHelmets.push_back(h);
@@ -206,19 +238,16 @@ namespace hlct {
             
             gameAsset.draw(state);
             
-            switch (state) {
-                case GAME_STATE_GAME:
-                    ofSetColor(ofColor::white);
-                    for (auto h : helmets){
-                        h->draw();
-                    }
-                    ofSetColor(ofColor::green);
-                    for (auto h : winHelmets){
-                        h->draw();
-                    }
-                    break;
-                default:
-                    break;
+            if (state == GAME_STATE_GAME) {
+                ofSetColor(ofColor::white);
+                for (auto h : helmets){
+                    h->draw();
+                }
+                ofSetColor(ofColor::green);
+                for (auto h : winHelmets){
+                    h->draw();
+                }
+                drawLives();
             }
         };
         
@@ -236,6 +265,7 @@ namespace hlct {
             gameTimer.animateFromTo(0, endTime);
             state = GAME_STATE_GAME;
             score = 0;
+            livesLeft = HLCT_LIVES;
             bTouchChecked = false;
         };
         
