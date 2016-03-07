@@ -8,7 +8,7 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofBackground(0);
     ofSetFrameRate(60);
-    ofSetWindowTitle("Bakarlar");
+    ofSetWindowTitle("Helmet Catcher");
     ofEnableSmoothing();
     ofEnableAntiAliasing();
     
