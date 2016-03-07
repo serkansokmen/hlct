@@ -1,3 +1,2 @@
 ofxAnimatable
 ofxGui
-ofxKinect

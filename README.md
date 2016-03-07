@@ -1,4 +1,4 @@
 Helmet Catchers
 ===============
 
-Basic game source code
+Game source code
