@@ -19,6 +19,7 @@ void ofApp::setup(){
     trackPixels = unique_ptr<ofPixels>(new ofPixels);
     
     game.setup();
+    bgImg.load("game/background.png");
     
     // Setup params
     gui.setName("Settings");
@@ -148,15 +149,17 @@ void ofApp::toggleKinect(bool& yes) {
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    bgImg.draw(0, 0);
     if (isTracking()){
         colorTracker.draw();
     }
-    
     game.draw();
     
-    ofSetColor(ofColor::red);
-    ofDrawCircle(trackAveragePosAnim->getCurrentPosition(), 20);
-    ofSetColor(ofColor::white);
+    if (game.isRunning()) {
+        ofSetColor(ofColor::red);
+        ofDrawCircle(trackAveragePosAnim->getCurrentPosition(), 20);
+        ofSetColor(ofColor::white);
+    }
     
     if (bDrawGui) {
         gui.draw();
@@ -175,6 +178,12 @@ void ofApp::keyPressed(int key){
     }
     if (key == ' ') {
         player.setPaused(player.isPlaying());
+    }
+    if (key == '1') {
+        handleGameStart();
+    }
+    if (key == '2') {
+        handleAddHelmet();
     }
 }
 

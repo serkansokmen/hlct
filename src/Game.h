@@ -12,6 +12,7 @@ namespace hlct {
         bool    alive;
         bool    touching;
         float   gravity;
+        ofRectangle intersectRect;
         
     public:
         void setup(const ofPixels& helmetPixels){
@@ -19,14 +20,18 @@ namespace hlct {
             position.x = ofRandomWidth();
             alive = true;
             img.setFromPixels(helmetPixels);
-            float scl = ofClamp(ofRandomuf(), 0.2f, 0.8f);
+            float scl = ofClamp(ofRandomuf(), 0.6f, 1.f);
             img.resize(img.getWidth()*scl, img.getHeight()*scl);
             touching = false;
+            
+            intersectRect.set(position, img.getWidth(), img.getHeight());
         }
         void update(){
             if (alive && position.y <= ofGetHeight() - img.getHeight()) {
-                if (!touching)
+                if (!touching) {
                     position.y -= gravity;
+                    intersectRect.set(position, img.getWidth(), img.getHeight());
+                }
             } else {
                 alive = false;
             }
@@ -43,8 +48,9 @@ namespace hlct {
             img.draw(position);
         }
         bool checkTargetIntersects(const ofVec2f& target){
-            if (!touching)
-                touching = position.distance(target) < img.getWidth()/2;
+            if (!touching) {
+                touching = intersectRect.inside(target);
+            }
             return touching;
         }
         bool isAlive() {
@@ -52,54 +58,86 @@ namespace hlct {
         }
     };
     
+    
+    
     enum GameState {
         GAME_STATE_TITLE = 0,
         GAME_STATE_GAME = 1,
-        GAME_STATE_END = 2
+        GAME_STATE_END_WIN = 2,
+        GAME_STATE_END_LOOSE = 3,
     };
+    
+    
+    
+    
+    class GameAsset {
+        ofImage title0, title1, win, loose;
+        shared_ptr<ofImage> img;
+    public:
+        void setup(){
+            title0.load("game/title_0.png");
+            title1.load("game/title_1.png");
+            win.load("game/win.png");
+            loose.load("game/loose.png");
+            img = shared_ptr<ofImage>(new ofImage);
+        }
+        void draw(const GameState& state){
+            switch (state) {
+                case GAME_STATE_TITLE: {
+                    int seconds = (int)(ofGetElapsedTimeMillis() / 2000);
+                    if (seconds % 2 == 0) {
+                        *img = title0;
+                    } else {
+                        *img = title1;
+                    }
+                    break;
+                }
+                case GAME_STATE_GAME:
+                    break;
+                case GAME_STATE_END_WIN:
+                    *img = win;
+                    break;
+                case GAME_STATE_END_LOOSE:
+                    *img = loose;
+                    break;
+                default:
+                    break;
+            }
+            
+            if (state != GAME_STATE_GAME){
+                img->draw(0, 0);
+            }
+        }
+    };
+    
+    
+    
     
     class Game {
         
-        void updateGame(const ofVec2f& heroPos){
-            
-            float dt = 1.f/60.f;
-            gameTimer.update(dt);
-            
-            currentTime.set(gameTimer.getCurrentValue());
-            
-            if (!gameTimer.isAnimating() || helmets.empty()){
-                endGame();
-            } else {
-                for (int i=0; i<helmets.size(); ++i){
-                    shared_ptr<Helmet> h = helmets[i];
-                    h->checkTargetIntersects(heroPos);
-                    if (h.get()->isAlive()){
-                        h.get()->update();
-                    } else {
-                        helmets.erase(helmets.begin() + i);
-                    }
-                }
-            }
-        };
-        
-        void drawTitleState(){
-            ofDrawBitmapStringHighlight("Helmet Catchers", ofGetWidth()/2, ofGetHeight()/2);
-        };
-        void drawGameState(){
-            for (auto h : helmets){
-                h.get()->draw();
-            }
-        };
-        void drawEndState(){
-            ofDrawBitmapStringHighlight("You win", ofGetWidth()/2, ofGetHeight()/2);
-        };
-        
         vector<shared_ptr<Helmet>>  helmets;
         ofImage                     helmetImg;
-        float                       startTime;
+        
+        GameAsset                   gameAsset;
         GameState                   state;
         ofxAnimatableFloat          gameTimer;
+        float                       startTime;
         bool                        timerEnd;
+        
+        inline bool helmetExists(){
+            bool exists = false;
+            if (helmets.size() < 1) {
+                return exists;
+            } else {
+                bool yes = false;
+                for (auto h : helmets) {
+                    if (!yes)
+                        yes = h.get()->isAlive();
+                }
+                exists = yes;
+            }
+            return exists;
+        }
         
     public:
         
@@ -110,25 +148,52 @@ namespace hlct {
         
         void setup(){
             
-            helmetImg.load("helmet.png");
+            gameAsset.setup();
+            helmetImg.load("game/helmet.png");
             helmets.clear();
             state = GAME_STATE_TITLE;
             
             params.setName("Game");
             params.add(endTime.set("End Time", 2, 2, 25));
             params.add(currentTime.set("Curent Time", 0.f, 0.f, 25.f));
+            params.add(score.set("Score", 0, 0, 3));
         };
         
         void update(const ofVec2f& heroPos){
-            
             switch (state) {
                 case GAME_STATE_TITLE:
                     break;
                 case GAME_STATE_GAME: {
-                    updateGame(heroPos);
+                    float dt = 1.f/60.f;
+                    gameTimer.update(dt);
+                    currentTime.set(gameTimer.getCurrentValue());
+                    
+                    if (gameTimer.getCurrentValue() >= endTime || score == 3){
+                        endGame();
+                    } else {
+                        if (!helmetExists()) {
+                            addRandomHelmet();
+                        }
+                        int wins = 0;
+                        for (int i=0; i<helmets.size(); ++i){
+                            shared_ptr<Helmet> h = helmets[i];
+                            if (h->checkTargetIntersects(heroPos)) {
+                                wins++;
+                            }
+                            
+                            if (h.get()->isAlive()){
+                                h.get()->update();
+                            } else {
+                                helmets.erase(helmets.begin() + i);
+                            }
+                        }
+                        score = wins;
+                    }
                     break;
                 }
-                case GAME_STATE_END:
+                case GAME_STATE_END_WIN:
+                    break;
+                case GAME_STATE_END_LOOSE:
                     break;
                 default:
                     break;
@@ -136,22 +201,27 @@ namespace hlct {
         };
         
         void draw(){
+            
+            gameAsset.draw(state);
+            
             switch (state) {
                 case GAME_STATE_TITLE:
-                    drawTitleState();
                     break;
                 case GAME_STATE_GAME:
-                    drawGameState();
+                    for (auto h : helmets){
+                        h.get()->draw();
+                    }
                     break;
-                case GAME_STATE_END:
-                    drawEndState();
+                case GAME_STATE_END_WIN:
+                    break;
+                case GAME_STATE_END_LOOSE:
                     break;
                 default:
                     break;
             }
         };
         
-        void startGame(const int& count){
+        void startGame(){
             
             gameTimer.setDuration(endTime);
             gameTimer.setRepeatType(PLAY_ONCE);
@@ -159,18 +229,21 @@ namespace hlct {
             gameTimer.setCurve(LINEAR);
             
             helmets.clear();
-            for (int i=0; i<count; ++i){
-                addRandomHelmet();
-            }
+            addRandomHelmet();
             
             gameTimer.animateFromTo(0, endTime);
             state = GAME_STATE_GAME;
+            score = 0;
         };
         
         void endGame(){
             timerEnd = true;
             startTime = ofGetElapsedTimeMillis();
-            state = GAME_STATE_END;
+            if (score < 3) {
+                state = GAME_STATE_END_LOOSE;
+            } else {
+                state = GAME_STATE_END_WIN;
+            }
             helmets.clear();
         };
         
@@ -187,6 +260,7 @@ namespace hlct {
         ofParameterGroup    params;
         ofParameter<float>  currentTime;
         ofParameter<int>    endTime;
+        ofParameter<int>    score;
     };
     
 }

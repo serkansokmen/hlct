@@ -28,7 +28,7 @@ public:
     void toggleKinect(bool& yes);
     
     inline void handleGameStart(){
-        game.startGame((int)ofRandom(4, 20));
+        game.startGame();
     }
     inline void handleAddHelmet(){
         game.addRandomHelmet();
@@ -45,6 +45,7 @@ public:
     unique_ptr<ofxAnimatableOfPoint>     trackAveragePosAnim;
     
     hlct::Game              game;
+    ofImage                 bgImg;
     
     ofxPanel                gui;
     ofxButton               btnStart;
