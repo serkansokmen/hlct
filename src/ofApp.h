@@ -19,8 +19,6 @@ public:
     void keyPressed(int key);
     void windowResized(int w, int h);
     
-    void toggleOsc(bool& yes);
-    
     inline void handleGameStart(){
         game.startGame();
     }
@@ -28,7 +26,7 @@ public:
         game.addRandomHelmet();
     }
     
-    unique_ptr<ofxAnimatableOfPoint>     heroPosAnim;
+    unique_ptr<ofxAnimatableOfPoint>    heroPosAnim;
     
     hlct::Game              game;
     ofImage                 bgImg;
@@ -36,7 +34,6 @@ public:
     ofxPanel                gui;
     ofxButton               btnStart;
     ofxButton               btnAddHelmet;
-    ofParameter<bool>       bUseOsc;
     
     bool bDrawGui;
 };

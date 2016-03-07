@@ -1,2 +1,3 @@
-ofxAnimatable
+ofxOsc
 ofxGui
+ofxAnimatable

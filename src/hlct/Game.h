@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxOsc.h"
 #include "ofxAnimatableFloat.h"
 #include "hlct/Helmet.h"
 #include "hlct/GameState.h"
@@ -21,14 +22,14 @@ namespace hlct {
         LivesDisplay                livesDisplay;
         
         ofxAnimatableFloat          gameTimer;
+        ofVec2f                     heroPos;
         float                       startTime;
         int                         livesLeft;
         bool                        timerEnd;
         bool                        bTouchChecked;
         
-        inline bool canAddHelmet(){
-            return helmets.size() == 0;
-        }
+        ofxOscReceiver                      receiver;
+        ofImage                             receivedImage;
         
     public:
         
@@ -46,10 +47,13 @@ namespace hlct {
             state = GAME_STATE_TITLE;
             
             params.setName("Game");
+            params.add(useOsc.set("Use OSC", false));
             params.add(endTime.set("End Time", 2, 2, 100));
             params.add(currentTime.set("Curent Time", 0.f, 0.f, 100.f));
             params.add(score.set("Score", 0, 0, HLCT_MAX_CATCH));
             params.add(helmetSection.set("Helmet Section", 0, 0, HLCT_HELMET_SECTION_COUNT));
+            
+            receiver.setup(OSC_PORT);
             
             float x = ofGetWidth() - helmetOutlineImg.getWidth()*HLCT_LIVES*0.5 - 70;
             float y = 30;
@@ -62,17 +66,45 @@ namespace hlct {
                                "game/helmet_outline.png");
         };
         
-        void update(const ofVec2f& heroPos){
+        void update(const ofVec2f& pos){
+            
+            heroPos.set(pos);
+            
             switch (state) {
+                case GAME_STATE_TITLE: {
+                    while (receiver.hasWaitingMessages()){
+                        ofxOscMessage m;
+                        receiver.getNextMessage(m);
+
+                        if (m.getAddress() == "/head/position"){
+                            // both the arguments are int32's
+                            float headX = m.getArgAsInt32(0);
+                            float headY = m.getArgAsInt32(1);
+                            ofLogWarning("/head/position " + ofToString(headX) + " : " + ofToString(headY));
+                        }
+                    }
+                    break;
+                }
                 case GAME_STATE_GAME: {
+                    
                     float dt = 1.f/60.f;
                     gameTimer.update(dt);
                     currentTime.set(gameTimer.getCurrentValue());
                     
+                    while (receiver.hasWaitingMessages()){
+                        ofxOscMessage m;
+                        receiver.getNextMessage(m);
+                        
+                        if (m.getAddress() == "/image"){
+                            ofBuffer buffer = m.getArgAsBlob(0);
+                            receivedImage.load(buffer);
+                        }
+                    }
+                    
                     if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0){
                         endGame();
                     } else {
-                        if (canAddHelmet()) {
+                        if (helmets.size() == 0) {
                             addRandomHelmet();
                         }
                         for (auto h : helmets){
@@ -110,6 +142,11 @@ namespace hlct {
             
             if (state == GAME_STATE_GAME) {
                 ofSetColor(ofColor::white);
+                
+                if (receivedImage.getWidth() > 0){
+                    receivedImage.draw(heroPos);
+                }
+
                 for (auto h : helmets){
                     h->draw();
                 }
@@ -166,5 +203,6 @@ namespace hlct {
         ofParameter<int>    endTime;
         ofParameter<int>    score;
         ofParameter<int>    helmetSection;
+        ofParameter<bool>   useOsc;
     };
 }

@@ -18,7 +18,6 @@ void ofApp::setup(){
     // Setup params
     gui.setName("Settings");
     ofParameterGroup params;
-    params.add(bUseOsc.set("Use OSC", false));
     params.add(game.params);
     
     gui.setup(params);
@@ -36,8 +35,6 @@ void ofApp::setup(){
     heroPosAnim->setRepeatTimes(0);
     heroPosAnim->setCurve(EASE_OUT);
     
-    bUseOsc.addListener(this, &ofApp::toggleOsc);
-    
     gui.loadFromFile("settings.xml");
     bDrawGui = true;
 }
@@ -52,17 +49,6 @@ void ofApp::update(){
 //    if (game.isRunning()){
 //        game.checkHelmetTouch(heroPosAnim->getCurrentPosition());
 //    }
-    
-    if (bUseOsc) {
-        // Handle osc
-    }
-}
-
-//--------------------------------------------------------------
-void ofApp::toggleOsc(bool& yes) {
-    if (yes) {
-    } else {
-    }
 }
 
 //--------------------------------------------------------------
@@ -102,7 +88,7 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y){
-    if (!bUseOsc) {
+    if (!game.useOsc) {
         heroPosAnim->animateTo(ofVec2f(x, heroPosAnim->getCurrentPosition().y));
     }
 }
@@ -114,7 +100,6 @@ void ofApp::windowResized(int w, int h){
 //--------------------------------------------------------------
 void ofApp::exit(){
     
-    bUseOsc.removeListener(this, &ofApp::toggleOsc);
     btnStart.removeListener(this, &ofApp::handleGameStart);
     btnAddHelmet.removeListener(this, &ofApp::handleAddHelmet);
     
