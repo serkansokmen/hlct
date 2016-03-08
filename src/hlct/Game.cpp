@@ -126,16 +126,6 @@ void hlct::Game::update(){
                 currentTime.set(gameTimer.getCurrentValue());
                 currentTimeStr = ofToString(currentTime);
                 
-//                while (receiver.hasWaitingMessages()){
-//                    ofxOscMessage m;
-//                    receiver.getNextMessage(m);
-//                    
-//                    if (m.getAddress() == "/image"){
-//                        ofBuffer buffer = m.getArgAsBlob(0);
-//                        receivedImage.load(buffer);
-//                    }
-//                }
-                
                 if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0){
                     endGame();
                 } else {
@@ -204,9 +194,6 @@ void hlct::Game::draw(){
         }
         case GAME_STATE_GAME: {
             ofSetColor(ofColor::white);
-//            if (receivedImage.getWidth() > 0){
-//                receivedImage.draw(heroPos);
-//            }
             for (auto h : helmets){
                 h->draw();
             }
@@ -270,7 +257,7 @@ void hlct::Game::endGame(){
 void hlct::Game::addRandomHelmet(){
     shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
     helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
-    helmet.get()->setup(helmetWhiteImg.getPixels(), helmetSection, stageRect);
+    helmet->setup(helmetWhiteImg.getPixels(), helmetSection, stageRect);
     helmets.push_back(helmet);
 }
 
