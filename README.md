@@ -1,4 +1,4 @@
-Helmet Catchers
-===============
+hlct
+====
 
-Basic game source code
+Game source code

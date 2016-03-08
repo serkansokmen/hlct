@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 namespace hlct {
+    
     enum GameState {
         GAME_STATE_TITLE = 0,
         GAME_STATE_GAME = 1,
