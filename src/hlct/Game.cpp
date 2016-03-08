@@ -146,8 +146,6 @@ void hlct::Game::update(){
 
 void hlct::Game::draw(){
     
-    gameAsset.draw();
-    
     if (state == GAME_STATE_GAME) {
         ofSetColor(ofColor::white);
         if (receivedImage.getWidth() > 0){
@@ -160,6 +158,8 @@ void hlct::Game::draw(){
             h->draw();
         }
         livesDisplay.draw(livesLeft);
+    } else {
+        gameAsset.draw();
     }
 }
 

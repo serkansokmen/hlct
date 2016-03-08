@@ -10,25 +10,25 @@ void hlct::GameAsset::setup(){
 
 
 void hlct::GameAsset::update(const GameState& state){
-    
     this->state = state;
-    
-    title.update();
-    win.update();
-    loose.update();
+    if (state != GAME_STATE_GAME){
+        title.update(state);
+        win.update(state);
+        loose.update(state);
+    }
 }
 
 
 void hlct::GameAsset::draw(){
     switch (state) {
         case GAME_STATE_TITLE:
-            title.draw(state);
+            title.draw();
             break;
         case GAME_STATE_END_WIN:
-            win.draw(state);
+            win.draw();
             break;
         case GAME_STATE_END_LOOSE:
-            loose.draw(state);
+            loose.draw();
             break;
         default:
             break;
