@@ -1,16 +1,18 @@
 #include "ImageSwitcher.h"
 
 
-void hlct::ImageSwitcher::setup(const string& path0, const string& path1){
+void hlct::ImageSwitcher::setup(const string& path0, const string& path1, const ofRectangle& rect){
     img0.load(path0);
     img1.load(path1);
     img = shared_ptr<ofImage>(new ofImage);
     
     timer.setup();
-    timer.setDuration(1);
+    timer.setDuration(2);
     timer.setRepeatType(LOOP_BACK_AND_FORTH);
     timer.setCurve(LINEAR);
     timer.animateTo(1.f);
+    
+    drawRect.set(rect);
 }
 
 void hlct::ImageSwitcher::update(const hlct::GameState& state){
@@ -25,8 +27,9 @@ void hlct::ImageSwitcher::update(const hlct::GameState& state){
             *img = img1;
         }
     }
+    drawRect.setFromCenter(drawRect.getCenter(), img->getWidth(), img->getHeight());
 }
 
 void hlct::ImageSwitcher::draw(){
-    img->draw(0, 0);
+    img->draw(drawRect);
 }

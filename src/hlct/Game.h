@@ -17,6 +17,34 @@ namespace hlct {
 
     class Game {
         
+        inline void handleUserExists(bool& exists){
+            if (!exists){
+                if (state == GAME_STATE_GAME){
+                    endGame();
+                }
+                bUserPosing = false;
+            }
+        };
+        
+        inline void handlePosing(bool& isPosing){
+            if (state == GAME_STATE_TITLE || state == GAME_STATE_POSING){
+                if (bUserExists) {
+                    if (isPosing){
+                        state = GAME_STATE_POSING;
+                        if (!gameStartTimer.isAnimating()) {
+                            gameStartTimer.animateFromTo(0.f, 1.f);
+                        }
+                    } else {
+                        state = GAME_STATE_TITLE;
+                        gameStartTimer.reset();
+                    }
+                } else {
+                    state = GAME_STATE_TITLE;
+                    gameStartTimer.reset();
+                }
+            }
+        };
+        
         inline void handleGameStart(bool& val){
             if (val) {
                 startGame();
@@ -30,14 +58,16 @@ namespace hlct {
             }
             bAddHelmet = false;
         };
+        void drawLoadingBar(const ofRectangle& rect, const float& width);
         
-        ofxAnimatableOfPoint        heroPos;
-        
+        ofVec2f                     heroPos;
+        ofImage                     bgImg;
         GameAsset                   gameAsset;
         GameState                   state;
         LivesDisplay                livesDisplay;
         
-        ofxAnimatableFloat          gameTimer;
+        ofxAnimatableFloat          gameStartTimer, gameTimer, gameEndTimer;
+        ofRectangle                 stageRect, loadingBarRect;
         
         ofxOscReceiver              receiver;
         
@@ -54,7 +84,7 @@ namespace hlct {
         
         ~Game();
         
-        void setup();
+        void setup(const ofRectangle& stageRect);
         void update();
         void draw();
         void startGame();
@@ -65,11 +95,11 @@ namespace hlct {
             return state == GAME_STATE_GAME;
         };
         inline ofVec2f getHeroPosition(){
-            return heroPos.getCurrentPosition();
+            return heroPos;
         };
         inline void mouseMoved(int x, int y){
             if (!useOsc) {
-                heroPos.animateTo(ofVec2f(x, heroPos.getCurrentPosition().y));
+                heroPos.x = x;
             }
         };
         
@@ -80,6 +110,8 @@ namespace hlct {
         ofParameter<int>    score;
         ofParameter<int>    helmetSection;
         ofParameter<bool>   useOsc;
+        ofParameter<bool>   bUserExists;
+        ofParameter<bool>   bUserPosing;
         ofParameter<bool>   bStart;
         ofParameter<bool>   bAddHelmet;
         ofParameter<bool>   bPaused;

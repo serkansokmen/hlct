@@ -12,15 +12,17 @@ void ofApp::setup(){
     ofEnableSmoothing();
     ofEnableAntiAliasing();
     
-    bgImg.load("game/background.png");
-    
     ofParameterGroup params;
-    game.setup();
+    ofRectangle gameRect;
+    gameRect.setFromCenter(ofGetWindowRect().getCenter(),
+                           ofGetWidth() - HLCT_CLAMP_STAGE,
+                           ofGetHeight() - HLCT_CLAMP_STAGE);
+    game.setup(gameRect);
     params.add(game.params);
     gui.setup(params);
     
     gui.loadFromFile("settings.xml");
-    bDrawGui = true;
+    bDrawGui = false;
 }
 
 //--------------------------------------------------------------
@@ -35,7 +37,6 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    bgImg.draw(0, 0);
     game.draw();
     
     if (game.isRunning()) {
@@ -68,6 +69,9 @@ void ofApp::keyPressed(int key){
     }
     if (key == '2') {
         game.addRandomHelmet();
+    }
+    if (key == 'O') {
+        game.useOsc = !game.useOsc;
     }
 }
 

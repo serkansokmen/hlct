@@ -18,7 +18,6 @@ public:
     void keyPressed(int key);
     void windowResized(int w, int h);
     
-    ofImage             bgImg;
     hlct::Game          game;
     
     ofxPanel            gui;

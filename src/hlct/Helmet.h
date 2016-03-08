@@ -13,9 +13,10 @@ namespace hlct {
         bool    alive;
         bool    win;
         ofRectangle intersectRect;
+        ofRectangle stageRect;
         
     public:
-        void setup(const ofPixels& helmetPixels, const int& sectionIndex);
+        void setup(const ofPixels& helmetPixels, const int& sectionIndex, const ofRectangle& stageRect);
         void update(const ofVec2f& heroPos);
         void draw();
         
