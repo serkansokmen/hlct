@@ -5,7 +5,7 @@ void hlct::ImageSwitcher::setup(const string& path0, const string& path1){
     img0.load(path0);
     img1.load(path1);
     img = shared_ptr<ofImage>(new ofImage);
-};
+}
 
 
 void hlct::ImageSwitcher::draw(const hlct::GameState& state){
@@ -18,4 +18,4 @@ void hlct::ImageSwitcher::draw(const hlct::GameState& state){
         }
         img->draw(0, 0);
     }
-};
+}
