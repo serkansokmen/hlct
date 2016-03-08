@@ -9,10 +9,16 @@
 namespace hlct {
     
     class GameAsset {
-        ImageSwitcher switchImgTitle, switchImgWin, switchImgLoose;
+        
+        ImageSwitcher       title;
+        ImageSwitcher       win;
+        ImageSwitcher       loose;
+        
+        GameState           state;
         
     public:
         void setup();
-        void draw(const GameState& state);
+        void update(const GameState& state);
+        void draw();
     };
 }
