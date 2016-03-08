@@ -19,7 +19,7 @@ void hlct::Game::setup(){
     params.setName("Game");
     params.add(bStart.set("New Game", false));
     params.add(useOsc.set("Osc", true));
-    params.add(endTime.set("Game Duration", 10, 10, 400));
+    params.add(endTime.set("Game Duration", HLCT_MIN_DURATION, HLCT_MIN_DURATION, HLCT_MAX_DURATION));
     params.add(currentTimeStr.set("Curent Time", "0"));
     params.add(bPaused.set("Paused", false));
     params.add(bAddHelmet.set("Add Helmet", false));
