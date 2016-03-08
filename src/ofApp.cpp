@@ -50,6 +50,10 @@ void ofApp::draw(){
 }
 
 
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y){
+    game.mouseMoved(x, y);
+}
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){

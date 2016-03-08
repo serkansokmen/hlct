@@ -5,7 +5,7 @@ hlct::Game::~Game(){
     
     bStart.removeListener(this, &Game::handleGameStart);
     bAddHelmet.removeListener(this, &Game::handleAddHelmet);
-};
+}
 
 
 void hlct::Game::setup(){
@@ -49,7 +49,7 @@ void hlct::Game::setup(){
                        HLCT_LIVES,
                        "game/helmet.png",
                        "game/helmet-outline.png");
-};
+}
 
 void hlct::Game::update(){
     
@@ -82,6 +82,8 @@ void hlct::Game::update(){
         }
     }
     
+    
+    gameAsset.update(state);
     switch (state) {
         case GAME_STATE_TITLE: {
             break;
@@ -140,11 +142,9 @@ void hlct::Game::update(){
         default:
             break;
     }
-};
+}
 
 void hlct::Game::draw(){
-    
-    gameAsset.draw(state);
     
     if (state == GAME_STATE_GAME) {
         ofSetColor(ofColor::white);
@@ -158,8 +158,10 @@ void hlct::Game::draw(){
             h->draw();
         }
         livesDisplay.draw(livesLeft);
+    } else {
+        gameAsset.draw();
     }
-};
+}
 
 void hlct::Game::startGame(){
     
@@ -179,7 +181,7 @@ void hlct::Game::startGame(){
     score = 0;
     livesLeft = HLCT_LIVES;
     bPaused = false;
-};
+}
 
 void hlct::Game::endGame(){
     timerEnd = true;
@@ -193,7 +195,7 @@ void hlct::Game::endGame(){
         state = GAME_STATE_END_WIN;
     }
     helmets.clear();
-};
+}
 
 void hlct::Game::addRandomHelmet(){
     shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);

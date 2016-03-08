@@ -8,7 +8,7 @@ void hlct::LivesDisplay::setup(const ofRectangle& rect, const int& totalLives, c
     
     imgLive.load(liveImgPath);
     imgDead.load(deadImgPath);
-};
+}
 
 
 void hlct::LivesDisplay::draw(const int& livesLeft){
@@ -32,4 +32,4 @@ void hlct::LivesDisplay::draw(const int& livesLeft){
     }
     ofPopStyle();
     ofPopMatrix();
-};
+}
