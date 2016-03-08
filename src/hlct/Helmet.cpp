@@ -10,27 +10,32 @@ void hlct::Helmet::setup(const ofPixels& helmetPixels, const int& sectionIndex, 
     
     alive = true;
     img.setFromPixels(helmetPixels);
-    scale = 0.5f;
     win = false;
 }
 
-void hlct::Helmet::update(const ofVec2f& heroPos){
-    if (alive && position.y <= stageRect.getHeight() - img.getHeight()*scale) {
-        intersectRect.set(position, img.getWidth()*scale*1.2, img.getHeight()*scale*1.2);
+void hlct::Helmet::update(const ofRectangle& heroRect){
+    if (alive && position.y <= stageRect.getHeight() - img.getHeight()) {
+        intersectRect.set(position, img.getWidth(), img.getHeight());
         if (!win) {
             position.y -= gravity;
         } else {
-            position.x = heroPos.x - img.getWidth()*scale*0.5;
-            position.y = heroPos.y - img.getHeight()*scale*1.5;
+            position.x = ofClamp(heroRect.getCenter().x - img.getWidth()*0.5,
+                                 HLCT_CLAMP_STAGE,
+                                 stageRect.getWidth()-HLCT_CLAMP_STAGE);
+            position.y = heroRect.getTop() - img.getHeight()*1.5;
         }
     } else {
         alive = false;
     }
-    if (win) {
-        scale = 0.5f;
-    }
 }
 
 void hlct::Helmet::draw(){
-    img.draw(position, img.getWidth()*scale, img.getHeight()*scale);
+    ofPushStyle();
+//    ofNoFill();
+//    ofSetColor(ofColor::blue);
+//    ofDrawRectangle(intersectRect);
+    ofSetColor(ofColor::white);
+    ofFill();
+    img.draw(position);
+    ofPopStyle();
 }

@@ -39,12 +39,6 @@ void ofApp::draw(){
     
     game.draw();
     
-    if (game.isRunning()) {
-        ofSetColor(ofColor::red);
-        ofDrawCircle(game.getHeroPosition(), 20);
-        ofSetColor(ofColor::white);
-    }
-    
     if (bDrawGui) {
         gui.draw();
     }

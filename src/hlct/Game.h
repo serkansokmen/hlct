@@ -71,7 +71,7 @@ namespace hlct {
         
         ofxOscReceiver              receiver;
         
-        ofImage                     helmetImg, helmetWhiteImg, helmetOutlineImg;
+        ofImage                     heroImg, helmetImg, helmetWhiteImg, helmetOutlineImg;
         ofImage                     receivedImage;
         float                       startTime;
         int                         livesLeft;

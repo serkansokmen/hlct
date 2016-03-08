@@ -12,14 +12,18 @@ hlct::Game::~Game(){
 
 void hlct::Game::setup(const ofRectangle& rect){
     
-    stageRect.set(rect);
+    heroImg.load("game/hero.png");
     bgImg.load("game/background.png");
-    
-    gameAsset.setup(stageRect);
-    
-    helmetImg.load("game/helmet.png");
+    helmetImg.load("game/helmet-red.png");
     helmetWhiteImg.load("game/helmet-white.png");
     helmetOutlineImg.load("game/helmet-outline.png");
+    
+    float scale = .5f;
+    heroImg.resize(heroImg.getWidth()*scale, heroImg.getHeight()*scale);
+    helmetWhiteImg.resize(helmetWhiteImg.getWidth()*scale, helmetWhiteImg.getHeight()*scale);
+    
+    stageRect.set(rect);
+    gameAsset.setup(stageRect);
     helmets.clear();
     
     state = GAME_STATE_TITLE;
@@ -67,7 +71,7 @@ void hlct::Game::setup(const ofRectangle& rect){
     float h = helmetImg.getHeight()*0.5;
     livesDisplay.setup(ofRectangle(x, y, w, h),
                        HLCT_LIVES,
-                       "game/helmet.png",
+                       "game/helmet-red.png",
                        "game/helmet-outline.png");
 }
 
@@ -96,7 +100,7 @@ void hlct::Game::update(){
                 ofLogWarning("/hlct/posing " + ofToString(bUserPosing));
             }
             if (m.getAddress() == "/hlct/position"){
-                float x = ofMap(m.getArgAsFloat(0), 0, 1, 0, stageRect.getWidth());
+                float x = ofClamp(ofMap(m.getArgAsFloat(0), 0, 1, 0, stageRect.getWidth()), HLCT_CLAMP_STAGE, ofGetWidth()-HLCT_CLAMP_STAGE);
                 heroPos.x = x;
             }
             
@@ -132,13 +136,16 @@ void hlct::Game::update(){
                     if (helmets.size() == 0) {
                         addRandomHelmet();
                     }
+                    ofRectangle heroRect(heroPos, heroImg.getWidth(), heroImg.getHeight());
+                    ofRectangle wRect(heroRect);
                     for (auto h : helmets){
-                        h->update(heroPos);
+                        h->update(heroRect);
                     }
+                    
                     int wi = 0;
                     for (auto h : winHelmets){
-                        h->update(ofVec2f(heroPos.x,
-                                          heroPos.y - h->getHeight()*0.25*wi));
+                        wRect.setY(heroRect.getTop() - h->getHeight()*0.15*wi + h->getHeight());
+                        h->update(wRect);
                         wi++;
                     }
                     for (int i=0; i<helmets.size(); ++i){
@@ -147,7 +154,7 @@ void hlct::Game::update(){
                             helmets.erase(helmets.begin() + i);
                             livesLeft--;
                         } else {
-                            if (h->isWin(heroPos)) {
+                            if (h->isWin(heroRect)) {
                                 winHelmets.push_back(h);
                                 helmets.erase(helmets.begin() + i);
                             }
@@ -193,11 +200,13 @@ void hlct::Game::draw(){
             break;
         }
         case GAME_STATE_GAME: {
+            
             ofSetColor(ofColor::white);
-            for (auto h : helmets){
+            heroImg.draw(heroPos);
+            for (auto h : winHelmets){
                 h->draw();
             }
-            for (auto h : winHelmets){
+            for (auto h : helmets){
                 h->draw();
             }
             livesDisplay.draw(livesLeft);
@@ -208,8 +217,8 @@ void hlct::Game::draw(){
             ofSetColor(ofColor::white, 50);
             drawLoadingBar(loadingBarRect, gameEndTimer.getCurrentValue());
             ofSetColor(ofColor::white);
-        }
             break;
+        }
         default:
             break;
     }

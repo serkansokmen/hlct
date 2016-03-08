@@ -9,7 +9,6 @@ namespace hlct {
         ofImage img;
         ofVec2f position;
         float   gravity;
-        float   scale;
         bool    alive;
         bool    win;
         ofRectangle intersectRect;
@@ -17,24 +16,24 @@ namespace hlct {
         
     public:
         void setup(const ofPixels& helmetPixels, const int& sectionIndex, const ofRectangle& stageRect);
-        void update(const ofVec2f& heroPos);
+        void update(const ofRectangle& heroRect);
         void draw();
         
         inline const ofVec2f& getPosition() {
             return position;
         }
         inline float getWidth() {
-            return img.getWidth()*scale;
+            return img.getWidth();
         }
         inline float getHeight() {
-            return img.getHeight()*scale;
+            return img.getHeight();
         }
         inline bool isAlive() {
             return alive;
         }
-        inline bool isWin(const ofVec2f& pos) {
+        inline bool isWin(const ofRectangle& rect) {
             if (!win) {
-                win = intersectRect.inside(pos);
+                win = intersectRect.intersects(rect);
             }
             return win;
         }
