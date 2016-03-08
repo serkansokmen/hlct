@@ -14,6 +14,7 @@ public:
 
     void exit();
     
+    void mouseMoved(int x, int y);
     void keyPressed(int key);
     void windowResized(int w, int h);
     
