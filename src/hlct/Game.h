@@ -15,7 +15,7 @@ namespace hlct {
         
         vector<shared_ptr<Helmet>>  helmets;
         vector<shared_ptr<Helmet>>  winHelmets;
-        ofImage                     helmetImg, helmetOutlineImg;
+        ofImage                     helmetImg, helmetWhiteImg, helmetOutlineImg;
         
         GameAsset                   gameAsset;
         GameState                   state;
@@ -28,8 +28,8 @@ namespace hlct {
         bool                        timerEnd;
         bool                        bTouchChecked;
         
-        ofxOscReceiver                      receiver;
-        ofImage                             receivedImage;
+        ofxOscReceiver              receiver;
+        ofImage                     receivedImage;
         
     public:
         
@@ -42,7 +42,8 @@ namespace hlct {
             
             gameAsset.setup();
             helmetImg.load("game/helmet.png");
-            helmetOutlineImg.load("game/helmet_outline.png");
+            helmetWhiteImg.load("game/helmet-white.png");
+            helmetOutlineImg.load("game/helmet-outline.png");
             helmets.clear();
             state = GAME_STATE_TITLE;
             
@@ -63,7 +64,7 @@ namespace hlct {
             livesDisplay.setup(ofRectangle(x, y, w, h),
                                HLCT_LIVES,
                                "game/helmet.png",
-                               "game/helmet_outline.png");
+                               "game/helmet-outline.png");
         };
         
         void update(const ofVec2f& pos){
@@ -142,15 +143,12 @@ namespace hlct {
             
             if (state == GAME_STATE_GAME) {
                 ofSetColor(ofColor::white);
-                
                 if (receivedImage.getWidth() > 0){
                     receivedImage.draw(heroPos);
                 }
-
                 for (auto h : helmets){
                     h->draw();
                 }
-                ofSetColor(ofColor::green);
                 for (auto h : winHelmets){
                     h->draw();
                 }
@@ -190,7 +188,7 @@ namespace hlct {
         void addRandomHelmet(){
             shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
             helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
-            helmet.get()->setup(helmetImg.getPixels(), helmetSection);
+            helmet.get()->setup(helmetWhiteImg.getPixels(), helmetSection);
             helmets.push_back(helmet);
         }
         
