@@ -4,6 +4,7 @@
 #include "ofxGui.h"
 #include "ofxOsc.h"
 #include "ofxAnimatableFloat.h"
+#include "ofxAnimatableOfPoint.h"
 
 #include "Helmet.h"
 #include "GameState.h"
@@ -30,29 +31,31 @@ namespace hlct {
             bAddHelmet = false;
         };
         
-        vector<shared_ptr<Helmet>>  helmets;
-        vector<shared_ptr<Helmet>>  winHelmets;
-        ofImage                     helmetImg, helmetWhiteImg, helmetOutlineImg;
+        ofxAnimatableOfPoint        heroPos;
         
         GameAsset                   gameAsset;
         GameState                   state;
         LivesDisplay                livesDisplay;
         
         ofxAnimatableFloat          gameTimer;
-        ofVec2f                     heroPos;
+        
+        ofxOscReceiver              receiver;
+        
+        ofImage                     helmetImg, helmetWhiteImg, helmetOutlineImg;
+        ofImage                     receivedImage;
         float                       startTime;
         int                         livesLeft;
         bool                        timerEnd;
         
-        ofxOscReceiver              receiver;
-        ofImage                     receivedImage;
+        vector<shared_ptr<Helmet>>  helmets;
+        vector<shared_ptr<Helmet>>  winHelmets;
         
     public:
         
         ~Game();
         
         void setup();
-        void update(const ofVec2f& pos);
+        void update();
         void draw();
         void startGame();
         void endGame();
@@ -60,6 +63,14 @@ namespace hlct {
         
         inline bool isRunning(){
             return state == GAME_STATE_GAME;
+        };
+        inline ofVec2f getHeroPosition(){
+            return heroPos.getCurrentPosition();
+        };
+        inline void mouseMoved(int x, int y){
+            if (!useOsc) {
+                heroPos.animateTo(ofVec2f(x, heroPos.getCurrentPosition().y));
+            }
         };
         
         ofParameterGroup    params;

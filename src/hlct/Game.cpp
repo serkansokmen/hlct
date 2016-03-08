@@ -9,12 +9,21 @@ hlct::Game::~Game(){
 
 
 void hlct::Game::setup(){
+    
     gameAsset.setup();
+    
     helmetImg.load("game/helmet.png");
     helmetWhiteImg.load("game/helmet-white.png");
     helmetOutlineImg.load("game/helmet-outline.png");
     helmets.clear();
+    
     state = GAME_STATE_TITLE;
+    
+    heroPos.setDuration(0.1);
+    heroPos.setPosition(ofVec2f(ofGetWidth()/2, ofGetHeight() - 240));
+    heroPos.setRepeatType(PLAY_ONCE);
+    heroPos.setRepeatTimes(0);
+    heroPos.setCurve(EASE_OUT);
     
     params.setName("Game");
     params.add(bStart.set("New Game", false));
@@ -29,7 +38,6 @@ void hlct::Game::setup(){
     bStart.addListener(this, &Game::handleGameStart);
     bAddHelmet.addListener(this, &Game::handleAddHelmet);
     
-    
     receiver.setup(HLCT_OSC_PORT);
     
     float x = ofGetWidth() - helmetOutlineImg.getWidth()*HLCT_LIVES*0.5 - 70;
@@ -43,23 +51,39 @@ void hlct::Game::setup(){
                        "game/helmet-outline.png");
 };
 
-void hlct::Game::update(const ofVec2f& pos){
+void hlct::Game::update(){
     
-    heroPos.set(pos);
+    float dt = 1.0f / 60.0f;
+    heroPos.update(dt);
+    
+    while (receiver.hasWaitingMessages()){
+        ofxOscMessage m;
+        receiver.getNextMessage(m);
+        
+        if (m.getAddress() == "/hlct/position"){
+            float x = ofMap(m.getArgAsFloat(1), 0, 1, 0, ofGetWidth());
+            float y = ofMap(m.getArgAsFloat(0), 0, 1, 0, ofGetHeight());
+
+            ofVec2f newPos(heroPos.getCurrentPosition());
+            newPos.x = x;
+            heroPos.animateTo(newPos);
+        }
+        
+        if (m.getAddress() == "/hlct/duration"){
+            endTime = m.getArgAsFloat(0);
+            ofLogWarning("/hlct/duration " + ofToString(endTime));
+        }
+        
+        if (m.getAddress() == "/hlct/new"){
+            bStart = m.getArgAsBool(0);
+        }
+        if (m.getAddress() == "/hlct/pause"){
+            bPaused = m.getArgAsBool(0);
+        }
+    }
     
     switch (state) {
         case GAME_STATE_TITLE: {
-            while (receiver.hasWaitingMessages()){
-                ofxOscMessage m;
-                receiver.getNextMessage(m);
-                
-                if (m.getAddress() == "/head/position"){
-                    // both the arguments are int32's
-                    float headX = m.getArgAsInt32(0);
-                    float headY = m.getArgAsInt32(1);
-                    ofLogWarning("/head/position " + ofToString(headX) + " : " + ofToString(headY));
-                }
-            }
             break;
         }
         case GAME_STATE_GAME: {
@@ -70,15 +94,15 @@ void hlct::Game::update(const ofVec2f& pos){
                 currentTime.set(gameTimer.getCurrentValue());
                 currentTimeStr = ofToString(currentTime);
                 
-                while (receiver.hasWaitingMessages()){
-                    ofxOscMessage m;
-                    receiver.getNextMessage(m);
-                    
-                    if (m.getAddress() == "/image"){
-                        ofBuffer buffer = m.getArgAsBlob(0);
-                        receivedImage.load(buffer);
-                    }
-                }
+//                while (receiver.hasWaitingMessages()){
+//                    ofxOscMessage m;
+//                    receiver.getNextMessage(m);
+//                    
+//                    if (m.getAddress() == "/image"){
+//                        ofBuffer buffer = m.getArgAsBlob(0);
+//                        receivedImage.load(buffer);
+//                    }
+//                }
                 
                 if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0){
                     endGame();
@@ -87,11 +111,12 @@ void hlct::Game::update(const ofVec2f& pos){
                         addRandomHelmet();
                     }
                     for (auto h : helmets){
-                        h->update(heroPos);
+                        h->update(heroPos.getCurrentPosition());
                     }
                     int wi = 0;
                     for (auto h : winHelmets){
-                        h->update(ofVec2f(heroPos.x, heroPos.y - h->getHeight()*0.25*wi));
+                        h->update(ofVec2f(heroPos.getCurrentPosition().x,
+                                          heroPos.getCurrentPosition().y - h->getHeight()*0.25*wi));
                         wi++;
                     }
                     for (int i=0; i<helmets.size(); ++i){
@@ -100,7 +125,7 @@ void hlct::Game::update(const ofVec2f& pos){
                             helmets.erase(helmets.begin() + i);
                             livesLeft--;
                         } else {
-                            if (h->isWin(heroPos)) {
+                            if (h->isWin(heroPos.getCurrentPosition())) {
                                 winHelmets.push_back(h);
                                 helmets.erase(helmets.begin() + i);
                             }
@@ -124,7 +149,7 @@ void hlct::Game::draw(){
     if (state == GAME_STATE_GAME) {
         ofSetColor(ofColor::white);
         if (receivedImage.getWidth() > 0){
-            receivedImage.draw(heroPos);
+            receivedImage.draw(heroPos.getCurrentPosition());
         }
         for (auto h : helmets){
             h->draw();

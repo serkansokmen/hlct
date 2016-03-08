@@ -19,13 +19,6 @@ void ofApp::setup(){
     params.add(game.params);
     gui.setup(params);
     
-    heroPosAnim = unique_ptr<ofxAnimatableOfPoint>(new ofxAnimatableOfPoint);
-    heroPosAnim->setDuration(0.1);
-    heroPosAnim->setPosition(ofVec2f(ofGetWidth()/2, ofGetHeight() - 240));
-    heroPosAnim->setRepeatType(PLAY_ONCE);
-    heroPosAnim->setRepeatTimes(0);
-    heroPosAnim->setCurve(EASE_OUT);
-    
     gui.loadFromFile("settings.xml");
     bDrawGui = true;
 }
@@ -33,10 +26,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    float dt = 1.0f / 60.0f;
-    heroPosAnim->update(dt);
-    
-    game.update(heroPosAnim->getCurrentPosition());
+    game.update();
 //    if (game.isRunning()){
 //        game.checkHelmetTouch(heroPosAnim->getCurrentPosition());
 //    }
@@ -50,7 +40,7 @@ void ofApp::draw(){
     
     if (game.isRunning()) {
         ofSetColor(ofColor::red);
-        ofDrawCircle(heroPosAnim->getCurrentPosition(), 20);
+        ofDrawCircle(game.getHeroPosition(), 20);
         ofSetColor(ofColor::white);
     }
     
@@ -74,13 +64,6 @@ void ofApp::keyPressed(int key){
     }
     if (key == '2') {
         game.addRandomHelmet();
-    }
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y){
-    if (!game.useOsc) {
-        heroPosAnim->animateTo(ofVec2f(x, heroPosAnim->getCurrentPosition().y));
     }
 }
 
