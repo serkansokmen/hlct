@@ -11,7 +11,7 @@ public:
     void setup();
     void update();
     void draw();
-    void drawPointCloud();
+
     void exit();
     
     void keyPressed(int key);
