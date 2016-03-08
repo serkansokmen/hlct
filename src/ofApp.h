@@ -6,7 +6,7 @@
 #include "hlct/Game.h"
 
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
     
 public:
     void setup();
@@ -19,21 +19,12 @@ public:
     void keyPressed(int key);
     void windowResized(int w, int h);
     
-    inline void handleGameStart(){
-        game.startGame();
-    }
-    inline void handleAddHelmet(){
-        game.addRandomHelmet();
-    }
+    unique_ptr<ofxAnimatableOfPoint> heroPosAnim;
     
-    unique_ptr<ofxAnimatableOfPoint>    heroPosAnim;
+    ofImage             bgImg;
+    hlct::Game          game;
     
-    hlct::Game              game;
-    ofImage                 bgImg;
-    
-    ofxPanel                gui;
-    ofxButton               btnStart;
-    ofxButton               btnAddHelmet;
+    ofxPanel            gui;
     
     bool bDrawGui;
 };

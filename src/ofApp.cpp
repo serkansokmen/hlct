@@ -8,25 +8,16 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofBackground(0);
     ofSetFrameRate(60);
-    ofSetWindowTitle("Helmet Catcher");
+    ofSetWindowTitle("HLCT");
     ofEnableSmoothing();
     ofEnableAntiAliasing();
     
-    game.setup();
     bgImg.load("game/background.png");
     
-    // Setup params
-    gui.setName("Settings");
     ofParameterGroup params;
+    game.setup();
     params.add(game.params);
-    
     gui.setup(params);
-    
-    btnStart.addListener(this, &ofApp::handleGameStart);
-    btnAddHelmet.addListener(this, &ofApp::handleAddHelmet);
-    
-    gui.add(btnStart.setup("New Game"));
-    gui.add(btnAddHelmet.setup("Add Random Helmet"));
     
     heroPosAnim = unique_ptr<ofxAnimatableOfPoint>(new ofxAnimatableOfPoint);
     heroPosAnim->setDuration(0.1);
@@ -79,10 +70,10 @@ void ofApp::keyPressed(int key){
         ofToggleFullscreen();
     }
     if (key == '1') {
-        handleGameStart();
+        game.startGame();
     }
     if (key == '2') {
-        handleAddHelmet();
+        game.addRandomHelmet();
     }
 }
 
@@ -99,9 +90,5 @@ void ofApp::windowResized(int w, int h){
 
 //--------------------------------------------------------------
 void ofApp::exit(){
-    
-    btnStart.removeListener(this, &ofApp::handleGameStart);
-    btnAddHelmet.removeListener(this, &ofApp::handleAddHelmet);
-    
     gui.saveToFile("settings.xml");
 }

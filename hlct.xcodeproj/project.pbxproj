@@ -21,6 +21,11 @@
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
+		E60DBDB81C8E6DAA00D2B2D4 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E60DBDB71C8E6DAA00D2B2D4 /* Game.cpp */; };
+		E60DBDBD1C8E6ECE00D2B2D4 /* ImageSwitcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E60DBDBB1C8E6ECE00D2B2D4 /* ImageSwitcher.cpp */; };
+		E60DBDBF1C8E6F1E00D2B2D4 /* GameAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E60DBDBE1C8E6F1E00D2B2D4 /* GameAsset.cpp */; };
+		E60DBDC11C8E6FAC00D2B2D4 /* Helmet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E60DBDC01C8E6FAC00D2B2D4 /* Helmet.cpp */; };
+		E60DBDC31C8E701E00D2B2D4 /* LivesDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E60DBDC21C8E701E00D2B2D4 /* LivesDisplay.cpp */; };
 		E6107C301C8E315B00B7DC7A /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C091C8E315B00B7DC7A /* ofxOscBundle.cpp */; };
 		E6107C311C8E315B00B7DC7A /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C0B1C8E315B00B7DC7A /* ofxOscMessage.cpp */; };
 		E6107C321C8E315B00B7DC7A /* ofxOscParameterSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C0D1C8E315B00B7DC7A /* ofxOscParameterSync.cpp */; };
@@ -90,19 +95,25 @@
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		A56904437B0DE34E18632717 /* Helmet.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Helmet.h; path = src/hlct/Helmet.h; sourceTree = SOURCE_ROOT; };
 		AB2DEF17078A80DDD0CBD0DE /* Game.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Game.h; path = src/hlct/Game.h; sourceTree = SOURCE_ROOT; };
-		B304D05DA43149641F8DAE21 /* Constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Constants.h; path = src/Constants.h; sourceTree = SOURCE_ROOT; };
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
 		C70D8946940288799E82131E /* ofxSliderGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSliderGroup.h; path = ../../../addons/ofxGui/src/ofxSliderGroup.h; sourceTree = SOURCE_ROOT; };
 		C88333E71C9457E441C33474 /* ofxButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxButton.cpp; path = ../../../addons/ofxGui/src/ofxButton.cpp; sourceTree = SOURCE_ROOT; };
 		E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* HelmetCatcherDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelmetCatcherDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* hlctDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hlctDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E60DBDB71C8E6DAA00D2B2D4 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = hlct/Game.cpp; sourceTree = "<group>"; };
+		E60DBDBB1C8E6ECE00D2B2D4 /* ImageSwitcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageSwitcher.cpp; path = hlct/ImageSwitcher.cpp; sourceTree = "<group>"; };
+		E60DBDBC1C8E6ECE00D2B2D4 /* ImageSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageSwitcher.h; path = hlct/ImageSwitcher.h; sourceTree = "<group>"; };
+		E60DBDBE1C8E6F1E00D2B2D4 /* GameAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameAsset.cpp; path = hlct/GameAsset.cpp; sourceTree = "<group>"; };
+		E60DBDC01C8E6FAC00D2B2D4 /* Helmet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Helmet.cpp; path = hlct/Helmet.cpp; sourceTree = "<group>"; };
+		E60DBDC21C8E701E00D2B2D4 /* LivesDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LivesDisplay.cpp; path = hlct/LivesDisplay.cpp; sourceTree = "<group>"; };
+		E60DBDC41C8E713C00D2B2D4 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = hlct/Constants.h; sourceTree = "<group>"; };
 		E6107C071C8E315B00B7DC7A /* ofxOsc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOsc.h; sourceTree = "<group>"; };
 		E6107C081C8E315B00B7DC7A /* ofxOscArg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscArg.h; sourceTree = "<group>"; };
 		E6107C091C8E315B00B7DC7A /* ofxOscBundle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscBundle.cpp; sourceTree = "<group>"; };
@@ -201,11 +212,18 @@
 		B1A51F91F08F5A0FE784D732 /* hlct */ = {
 			isa = PBXGroup;
 			children = (
+				E60DBDC41C8E713C00D2B2D4 /* Constants.h */,
 				AB2DEF17078A80DDD0CBD0DE /* Game.h */,
+				E60DBDB71C8E6DAA00D2B2D4 /* Game.cpp */,
 				500DFA698EC2145C0A785894 /* GameAsset.h */,
+				E60DBDBE1C8E6F1E00D2B2D4 /* GameAsset.cpp */,
 				0B04454D74AA654571895F7E /* GameState.h */,
 				A56904437B0DE34E18632717 /* Helmet.h */,
+				E60DBDC01C8E6FAC00D2B2D4 /* Helmet.cpp */,
 				118F03C9D403F32F4D64E7FA /* LivesDisplay.h */,
+				E60DBDC21C8E701E00D2B2D4 /* LivesDisplay.cpp */,
+				E60DBDBC1C8E6ECE00D2B2D4 /* ImageSwitcher.h */,
+				E60DBDBB1C8E6ECE00D2B2D4 /* ImageSwitcher.cpp */,
 			);
 			name = hlct;
 			sourceTree = "<group>";
@@ -228,9 +246,9 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				8D83D7AC476703EBECC1932D /* ofxAnimatable */,
-				480A780D8D0308AE4A368801 /* ofxGui */,
 				E6107C051C8E315B00B7DC7A /* ofxOsc */,
+				480A780D8D0308AE4A368801 /* ofxGui */,
+				8D83D7AC476703EBECC1932D /* ofxAnimatable */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -252,7 +270,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				6948EE371B920CB800B5AC1A /* local_addons */,
-				E4B69B5B0A3A1756003C02F2 /* HelmetCatcherDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* hlctDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -262,7 +280,6 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				B304D05DA43149641F8DAE21 /* Constants.h */,
 				B1A51F91F08F5A0FE784D732 /* hlct */,
 			);
 			path = src;
@@ -377,9 +394,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* HelmetCatcher */ = {
+		E4B69B5A0A3A1756003C02F2 /* hlct */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "HelmetCatcher" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "hlct" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -392,9 +409,9 @@
 			dependencies = (
 				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
-			name = HelmetCatcher;
+			name = hlct;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* HelmetCatcherDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* hlctDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -405,7 +422,7 @@
 			attributes = {
 				LastUpgradeCheck = 0720;
 			};
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "HelmetCatcher" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "hlct" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -426,7 +443,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* HelmetCatcher */,
+				E4B69B5A0A3A1756003C02F2 /* hlct */,
 			);
 		};
 /* End PBXProject section */
@@ -475,6 +492,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E60DBDC11C8E6FAC00D2B2D4 /* Helmet.cpp in Sources */,
+				E60DBDB81C8E6DAA00D2B2D4 /* Game.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E6107C3B1C8E315B00B7DC7A /* OscTypes.cpp in Sources */,
 				E6107C321C8E315B00B7DC7A /* ofxOscParameterSync.cpp in Sources */,
@@ -484,10 +503,12 @@
 				E6107C381C8E315B00B7DC7A /* OscOutboundPacketStream.cpp in Sources */,
 				E6107C331C8E315B00B7DC7A /* ofxOscReceiver.cpp in Sources */,
 				5D067CF087427621DD1E64B8 /* ofxAnimatableFloat.cpp in Sources */,
+				E60DBDBD1C8E6ECE00D2B2D4 /* ImageSwitcher.cpp in Sources */,
 				E6107C361C8E315B00B7DC7A /* NetworkingUtils.cpp in Sources */,
 				E6107C341C8E315B00B7DC7A /* ofxOscSender.cpp in Sources */,
 				74D31933EE82E12834DB3B06 /* ofxAnimatableOfColor.cpp in Sources */,
 				E6107C391C8E315B00B7DC7A /* OscPrintReceivedElements.cpp in Sources */,
+				E60DBDC31C8E701E00D2B2D4 /* LivesDisplay.cpp in Sources */,
 				BC054B7D3B48B395B1D87F2E /* ofxAnimatableOfPoint.cpp in Sources */,
 				E6107C301C8E315B00B7DC7A /* ofxOscBundle.cpp in Sources */,
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
@@ -498,6 +519,7 @@
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
+				E60DBDBF1C8E6F1E00D2B2D4 /* GameAsset.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				E6107C351C8E315B00B7DC7A /* IpEndpointName.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
@@ -639,7 +661,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cc.openFrameworks.ofapp;
-				PRODUCT_NAME = "$(TARGET_NAME)Debug";
+				PRODUCT_NAME = hlctDebug;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -679,7 +701,7 @@
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = cc.openFrameworks.ofapp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = hlctDebug;
 				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
@@ -689,7 +711,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "HelmetCatcher" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "hlct" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -698,7 +720,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "HelmetCatcher" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "hlct" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
