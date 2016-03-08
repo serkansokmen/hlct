@@ -11,8 +11,6 @@ void hlct::ImageSwitcher::setup(const string& path0, const string& path1){
     timer.setRepeatType(LOOP_BACK_AND_FORTH);
     timer.setCurve(LINEAR);
     timer.animateTo(1.f);
-
-    drawFirst = true;
 }
 
 void hlct::ImageSwitcher::update(const hlct::GameState& state){
@@ -20,17 +18,15 @@ void hlct::ImageSwitcher::update(const hlct::GameState& state){
     timer.update(1.f/60.f);
     
     if (state != GAME_STATE_GAME) {
-
-        int val = (int)(timer.getCurrentValue()*10);
-        drawFirst = val <= 5;
+        float val = (timer.getCurrentValue()*10);
+        if (val <= 5.5){
+            *img = img0;
+        } else {
+            *img = img1;
+        }
     }
 }
 
 void hlct::ImageSwitcher::draw(){
-    if (drawFirst){
-        *img = img0;
-    } else {
-        *img = img1;
-    }
     img->draw(0, 0);
 }

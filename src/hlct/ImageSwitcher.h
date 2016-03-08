@@ -12,7 +12,6 @@ namespace hlct {
         ofImage             img0, img1;
         shared_ptr<ofImage> img;
         ofxAnimatableFloat  timer;
-        bool                drawFirst;
 
     public:
         void setup(const string& path0,
