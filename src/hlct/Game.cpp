@@ -82,6 +82,8 @@ void hlct::Game::update(){
         }
     }
     
+    
+    gameAsset.update(state);
     switch (state) {
         case GAME_STATE_TITLE: {
             break;
@@ -144,7 +146,7 @@ void hlct::Game::update(){
 
 void hlct::Game::draw(){
     
-    gameAsset.draw(state);
+    gameAsset.draw();
     
     if (state == GAME_STATE_GAME) {
         ofSetColor(ofColor::white);

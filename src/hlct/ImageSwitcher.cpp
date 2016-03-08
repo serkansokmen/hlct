@@ -8,6 +8,11 @@ void hlct::ImageSwitcher::setup(const string& path0, const string& path1){
 }
 
 
+void hlct::ImageSwitcher::update(){
+    
+}
+
+
 void hlct::ImageSwitcher::draw(const hlct::GameState& state){
     if (state != GAME_STATE_GAME){
         int seconds = (int)(ofGetElapsedTimeMillis() / 2000);

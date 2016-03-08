@@ -14,7 +14,7 @@ namespace hlct {
     public:
         void setup(const string& path0,
                    const string& path1);
-        
+        void update();
         void draw(const GameState& state);
     };
 }
