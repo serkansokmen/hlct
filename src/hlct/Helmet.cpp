@@ -13,7 +13,9 @@ void hlct::Helmet::setup(const ofPixels& helmetPixels, const int& sectionIndex, 
     win = false;
 }
 
-void hlct::Helmet::update(const ofRectangle& heroRect){
+void hlct::Helmet::update(const ofRectangle& heroRect, const float& scale){
+    
+    this->scale = scale;
     if (alive && position.y <= stageRect.getHeight() - img.getHeight()) {
         intersectRect.set(position, img.getWidth(), img.getHeight());
         if (!win) {

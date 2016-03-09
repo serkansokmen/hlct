@@ -107,6 +107,9 @@ namespace hlct {
         
         ofParameterGroup    params;
         ofParameter<string> currentTimeStr;
+        ofParameter<float>  scaleHero;
+        ofParameter<float>  scaleBait;
+        ofParameter<float>  scaleBaitWin;
         ofParameter<float>  scaleLive;
         ofParameter<float>  currentTime;
         ofParameter<int>    endTime;

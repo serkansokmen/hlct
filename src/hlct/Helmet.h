@@ -9,6 +9,7 @@ namespace hlct {
         ofImage img;
         ofVec2f position;
         float   gravity;
+        float   scale;
         bool    alive;
         bool    win;
         ofRectangle intersectRect;
@@ -16,7 +17,7 @@ namespace hlct {
         
     public:
         void setup(const ofPixels& helmetPixels, const int& sectionIndex, const ofRectangle& stageRect);
-        void update(const ofRectangle& heroRect);
+        void update(const ofRectangle& heroRect, const float& scale);
         void draw();
         
         inline const ofVec2f& getPosition() {

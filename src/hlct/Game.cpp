@@ -1,6 +1,7 @@
 #include "Game.h"
 
 hlct::Game::Game(){
+    // Asset pack
     imgPack.brand->load("game/helmet.png");
     imgPack.hero->load("game/hero.png");
     imgPack.liveFull->load("game/live-full.png");
@@ -9,14 +10,9 @@ hlct::Game::Game(){
     
     // Create a smaller version of brand helmet to use as bait
     ofImage baitImg;
-    float sclBait = .5f;
     baitImg.setFromPixels(imgPack.brand->getPixels());
-    baitImg.resize(baitImg.getWidth()*sclBait, baitImg.getHeight()*sclBait);
+    baitImg.resize(baitImg.getWidth(), baitImg.getHeight());
     imgPack.bait->setFromPixels(baitImg.getPixels());
-    
-    // Scale hero to half
-    float sclHero = .75f;
-    imgPack.hero->resize(imgPack.hero->getWidth()*sclHero, imgPack.hero->getHeight()*sclHero);
 }
 
 hlct::Game::~Game(){
@@ -59,6 +55,9 @@ void hlct::Game::setup(const ofRectangle& rect){
     params.setName("Game");
     params.add(bStart.set("New Game", false));
     params.add(endTime.set("Game Duration", HLCT_MIN_DURATION, HLCT_MIN_DURATION, HLCT_MAX_DURATION));
+    params.add(scaleHero.set("Hero Scale", HLCT_MAX_HERO_SCALE/2, HLCT_MIN_HERO_SCALE, HLCT_MAX_HERO_SCALE));
+    params.add(scaleBait.set("Dropping Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
+    params.add(scaleBaitWin.set("Win Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
     params.add(scaleLive.set("Live Icon Scale", HLCT_MAX_LIVE_SCALE/2, HLCT_MIN_LIVE_SCALE, HLCT_MAX_LIVE_SCALE));
     params.add(currentTimeStr.set("Curent Time", "0"));
     params.add(bPaused.set("Paused", false));
@@ -272,8 +271,10 @@ void hlct::Game::draw(){
             break;
         }
         case GAME_STATE_GAME: {
+            ofSetColor(ofColor::green);
+            ofDrawRectangle(heroPos, imgPack.hero->getWidth()*scaleHero, imgPack.hero->getHeight()*scaleHero);
             ofSetColor(ofColor::white);
-            imgPack.hero->draw(heroPos);
+            imgPack.hero->draw(heroPos, imgPack.hero->getWidth()*scaleHero, imgPack.hero->getHeight()*scaleHero);
             for (auto h : winHelmets){
                 h->draw();
             }
