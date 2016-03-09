@@ -4,7 +4,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    ofSetLogLevel(OF_LOG_WARNING);
+    ofSetLogLevel(OF_LOG_ERROR);
     ofSetVerticalSync(true);
     ofBackground(0);
     ofSetFrameRate(60);
