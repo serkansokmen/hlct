@@ -15,10 +15,11 @@ namespace hlct {
         ofImage     dead;
         
     public:
-        void setup(const ofRectangle& stageRect,
-                   const ImagePack& imgPack,
+        void setup(const ImagePack& imgPack,
                    const int& totalLives);
         
-        void draw(const int& livesLeft);
+        void draw(const ofRectangle& stageRect,
+                  const int& livesLeft,
+                  const float& scale);
     };
 }

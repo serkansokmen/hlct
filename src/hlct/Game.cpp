@@ -54,9 +54,12 @@ void hlct::Game::setup(const ofRectangle& rect){
                              stageRect.getCenter().y + 200,
                              400, 25);
     
+    livesDisplay.setup(imgPack, HLCT_LIVES);
+    
     params.setName("Game");
     params.add(bStart.set("New Game", false));
     params.add(endTime.set("Game Duration", HLCT_MIN_DURATION, HLCT_MIN_DURATION, HLCT_MAX_DURATION));
+    params.add(scaleLive.set("Live Icon Scale", HLCT_MAX_LIVE_SCALE/2, HLCT_MIN_LIVE_SCALE, HLCT_MAX_LIVE_SCALE));
     params.add(currentTimeStr.set("Curent Time", "0"));
     params.add(bPaused.set("Paused", false));
     
@@ -74,8 +77,6 @@ void hlct::Game::setup(const ofRectangle& rect){
     bAddHelmet.addListener(this, &Game::handleAddHelmet);
     
     receiver.setup(HLCT_OSC_PORT);
-    
-    livesDisplay.setup(stageRect, imgPack, HLCT_LIVES);
 }
 
 
@@ -279,7 +280,7 @@ void hlct::Game::draw(){
             for (auto h : helmets){
                 h->draw();
             }
-            livesDisplay.draw(livesLeft);
+            livesDisplay.draw(stageRect, livesLeft, scaleLive);
             break;
         }
         case GAME_STATE_END_LOOSE:
