@@ -8,7 +8,7 @@
 
 #include "Helmet.h"
 #include "GameState.h"
-#include "GameAsset.h"
+#include "InfoScreen.h"
 #include "LivesDisplay.h"
 #include "Constants.h"
 
@@ -58,10 +58,13 @@ namespace hlct {
             }
             bAddHelmet = false;
         };
+        
+        void setupInfoScreens();
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         
         ofVec2f                     heroPos;
-        GameAsset                   gameAsset;
+        std::map<string, InfoScreen> screens;
+        
         GameState                   state;
         LivesDisplay                livesDisplay;
         

@@ -22,3 +22,7 @@
 #define HLCT_OSC_ENDPOINT_POSITION      "/hlct/position"
 #define HLCT_OSC_ENDPOINT_NEW           "/hlct/new"
 #define HLCT_OSC_ENDPOINT_PAUSE         "/hlct/pause"
+
+#define HLCT_INFO_SCREEN_FONT_PATH      "font/Kollektif-Bold.ttf"   // info screen font path
+#define HLCT_INFO_SCREEN_FONT_SIZE      85                          // info screen font size
+#define HLCT_INFO_SCREEN_DURATION       2                           // seconds for info screen message switch timer

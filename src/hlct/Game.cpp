@@ -32,7 +32,8 @@ hlct::Game::~Game(){
 void hlct::Game::setup(const ofRectangle& rect){
     
     stageRect.set(rect);
-    gameAsset.setup(stageRect);
+    setupInfoScreens();
+    
     helmets.clear();
     
     state = GAME_STATE_TITLE;
@@ -78,6 +79,70 @@ void hlct::Game::setup(const ofRectangle& rect){
 }
 
 
+void hlct::Game::setupInfoScreens(){
+    // Setup info screens and messages
+    InfoScreen screenTitle;
+    InfoScreen screenPosing;
+    InfoScreen screenWin;
+    InfoScreen screenLoose;
+    vector<string> messages;
+    
+    // Title Screen
+    string msg = "SAFETY FIRST!";
+    messages.push_back(msg);
+    msg = "COLLECT ALL HARD HATS!";
+    messages.push_back(msg);
+    screenTitle.setup(stageRect,
+                      HLCT_INFO_SCREEN_FONT_PATH,
+                      HLCT_INFO_SCREEN_FONT_SIZE,
+                      HLCT_INFO_SCREEN_DURATION,
+                      imgPack.brand->getPixels(),
+                      messages);
+    
+    // Posing Screen
+    messages.clear();
+    msg = "PLEASE WAIT IN RANGE...";
+    messages.push_back(msg);
+    screenPosing.setup(stageRect,
+                       HLCT_INFO_SCREEN_FONT_PATH,
+                       HLCT_INFO_SCREEN_FONT_SIZE,
+                       HLCT_INFO_SCREEN_DURATION,
+                       imgPack.brand->getPixels(),
+                       messages);
+    
+    // Win Screen
+    messages.clear();
+    msg = "YOU WIN!";
+    messages.push_back(msg);
+    msg = "YOU ARE IN SAFE NOW!";
+    messages.push_back(msg);
+    screenWin.setup(stageRect,
+                    HLCT_INFO_SCREEN_FONT_PATH,
+                    HLCT_INFO_SCREEN_FONT_SIZE,
+                    HLCT_INFO_SCREEN_DURATION,
+                    imgPack.brand->getPixels(),
+                    messages);
+    
+    // Loose Screen
+    messages.clear();
+    msg = "GAME OVER!";
+    messages.push_back(msg);
+    msg = "BE CAREFUL!";
+    messages.push_back(msg);
+    screenLoose.setup(stageRect,
+                      HLCT_INFO_SCREEN_FONT_PATH,
+                      HLCT_INFO_SCREEN_FONT_SIZE,
+                      HLCT_INFO_SCREEN_DURATION,
+                      imgPack.brand->getPixels(),
+                      messages);
+    
+    screens["title"] = screenTitle;
+    screens["posing"] = screenPosing;
+    screens["win"] = screenWin;
+    screens["loose"] = screenLoose;
+}
+
+
 void hlct::Game::update(){
     
     float dt = 1.f/60.f;
@@ -111,13 +176,14 @@ void hlct::Game::update(){
         }
     }
     
-    gameAsset.update(state);
     switch (state){
         case GAME_STATE_TITLE: {
+            screens["title"].update();
             break;
         }
             
         case GAME_STATE_POSING:
+            screens["posing"].update();
             gameStartTimer.update(dt);
             break;
             
@@ -166,6 +232,11 @@ void hlct::Game::update(){
         }
         case GAME_STATE_END_LOOSE:
         case GAME_STATE_END_WIN: {
+            if (state == GAME_STATE_END_LOOSE){
+                screens["loose"].update();
+            } else if (state == GAME_STATE_END_WIN){
+                screens["win"].update();
+            }
             gameEndTimer.update(dt);
             if (!gameEndTimer.isAnimating()){
                 state = GAME_STATE_TITLE;
@@ -186,8 +257,10 @@ void hlct::Game::draw(){
     
     switch (state){
         case GAME_STATE_TITLE:
+            screens["title"].draw();
             break;
         case GAME_STATE_POSING: {
+            screens["posing"].draw();
             if (bUserExists && bUserPosing){
                 ofSetColor(ofColor::white);
                 drawLoadingBar(loadingBarRect, gameStartTimer.getCurrentValue());
@@ -198,7 +271,6 @@ void hlct::Game::draw(){
             break;
         }
         case GAME_STATE_GAME: {
-            
             ofSetColor(ofColor::white);
             imgPack.hero->draw(heroPos);
             for (auto h : winHelmets){
@@ -211,18 +283,20 @@ void hlct::Game::draw(){
             break;
         }
         case GAME_STATE_END_LOOSE:
-        case GAME_STATE_END_WIN: {
-            ofSetColor(ofColor::white, 50);
-            drawLoadingBar(loadingBarRect, gameEndTimer.getCurrentValue());
-            ofSetColor(ofColor::white);
+            screens["loose"].draw();
             break;
-        }
+        case GAME_STATE_END_WIN:
+            screens["win"].draw();
+            break;
         default:
             break;
     }
     
-    if (state != GAME_STATE_GAME) {
-        gameAsset.draw();
+    // Draw end timer bar
+    if (state == GAME_STATE_END_LOOSE || state == GAME_STATE_END_WIN){
+        ofSetColor(ofColor::white, 50);
+        drawLoadingBar(loadingBarRect, gameEndTimer.getCurrentValue());
+        ofSetColor(ofColor::white);
     }
 }
 
