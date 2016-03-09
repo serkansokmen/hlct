@@ -203,13 +203,13 @@ void hlct::Game::update(){
                     ofRectangle heroRect(heroPos, imgPack.hero->getWidth(), imgPack.hero->getHeight());
                     ofRectangle wRect(heroRect);
                     for (auto h : helmets){
-                        h->update(heroRect);
+                        h->update(heroRect, scaleBait);
                     }
                     
                     int wi = 0;
                     for (auto h : winHelmets){
                         wRect.setY(heroRect.getTop() - h->getHeight()*0.15*wi + h->getHeight());
-                        h->update(wRect);
+                        h->update(wRect, scaleBaitWin);
                         wi++;
                     }
                     for (int i=0; i<helmets.size(); ++i){
