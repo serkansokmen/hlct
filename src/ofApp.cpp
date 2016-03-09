@@ -4,11 +4,10 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    ofSetLogLevel(OF_LOG_WARNING);
+    ofSetLogLevel(OF_LOG_NOTICE);
     ofSetVerticalSync(true);
     ofBackground(0);
     ofSetFrameRate(60);
-    ofSetWindowTitle("HLCT");
     ofEnableSmoothing();
     ofEnableAntiAliasing();
     

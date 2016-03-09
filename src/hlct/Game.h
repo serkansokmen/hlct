@@ -8,7 +8,7 @@
 
 #include "Helmet.h"
 #include "GameState.h"
-#include "GameAsset.h"
+#include "InfoScreen.h"
 #include "LivesDisplay.h"
 #include "Constants.h"
 
@@ -58,11 +58,13 @@ namespace hlct {
             }
             bAddHelmet = false;
         };
+        
+        void setupInfoScreens();
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         
         ofVec2f                     heroPos;
-        ofImage                     bgImg;
-        GameAsset                   gameAsset;
+        std::map<string, InfoScreen> screens;
+        
         GameState                   state;
         LivesDisplay                livesDisplay;
         
@@ -70,9 +72,8 @@ namespace hlct {
         ofRectangle                 stageRect, loadingBarRect;
         
         ofxOscReceiver              receiver;
+        ImagePack                   imgPack;
         
-        ofImage                     heroImg, helmetImg, helmetWhiteImg, helmetOutlineImg;
-        ofImage                     receivedImage;
         float                       startTime;
         int                         livesLeft;
         bool                        timerEnd;
@@ -82,6 +83,7 @@ namespace hlct {
         
     public:
         
+        Game();
         ~Game();
         
         void setup(const ofRectangle& stageRect);
