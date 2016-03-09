@@ -34,7 +34,7 @@ void hlct::Game::setup(const ofRectangle& rect){
     
     state = GAME_STATE_TITLE;
     
-    hero.setup(ofVec2f(stageRect.getWidth()/2, stageRect.getHeight() - HLCT_HERO_BOTTOM),
+    hero.setup(ofVec2f(stageRect.getWidth()/2, stageRect.getBottom() - HLCT_HERO_BOTTOM),
                imgPack.hero->getPixels());
     
     gameStartTimer.setDuration(HLCT_USER_POSE_DURATION);
@@ -46,10 +46,6 @@ void hlct::Game::setup(const ofRectangle& rect){
     
     gameEndTimer.setDuration(HLCT_GAME_END_TO_TITLE_DURATION);
     gameEndTimer.setCurve(LINEAR);
-    
-    loadingBarRect.setFromCenter(stageRect.getCenter().x,
-                             stageRect.getCenter().y + 200,
-                             400, 25);
     
     livesDisplay.setup(imgPack, HLCT_LIVES);
     
@@ -139,8 +135,6 @@ void hlct::Game::setupInfoScreens(){
 
 void hlct::Game::update(){
     
-    float dt = 1.f/60.f;
-    
     if (useOsc){
         while (receiver.hasWaitingMessages()){
             
@@ -176,15 +170,17 @@ void hlct::Game::update(){
             break;
         }
             
-        case GAME_STATE_POSING:
+        case GAME_STATE_POSING: {
             screens["posing"].update();
-            gameStartTimer.update(dt);
+            gameStartTimer.update(HLCT_ANIM_UPDATE_CYCLE);
+            resizeLoadingBar("posing");
             break;
+        }
             
         case GAME_STATE_GAME: {
             
             if (!bPaused){
-                gameTimer.update(dt);
+                gameTimer.update(HLCT_ANIM_UPDATE_CYCLE);
                 hero.update(stageRect, scaleHero);
                 currentTime.set(gameTimer.getCurrentValue());
                 currentTimeStr = ofToString(currentTime);
@@ -230,10 +226,12 @@ void hlct::Game::update(){
         case GAME_STATE_END_WIN: {
             if (state == GAME_STATE_END_LOOSE){
                 screens["loose"].update();
+                resizeLoadingBar("loose");
             } else if (state == GAME_STATE_END_WIN){
                 screens["win"].update();
+                resizeLoadingBar("win");
             }
-            gameEndTimer.update(dt);
+            gameEndTimer.update(HLCT_ANIM_UPDATE_CYCLE);
             if (!gameEndTimer.isAnimating()){
                 state = GAME_STATE_TITLE;
                 bUserPosing = false;

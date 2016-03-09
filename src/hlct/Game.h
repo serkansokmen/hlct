@@ -60,6 +60,12 @@ namespace hlct {
             bAddHelmet = false;
         };
         
+        inline void resizeLoadingBar(const string& infoScreenName){
+            loadingBarRect.setFromCenter(screens[infoScreenName].getContainerRectangle().getCenter(),
+                                         400, 25);
+            loadingBarRect.setY(screens[infoScreenName].getContainerRectangle().getBottom() + 120);
+        };
+        
         void setupInfoScreens();
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         

@@ -25,7 +25,7 @@ void hlct::Helmet::update(const ofRectangle& stageRect, const ofRectangle& heroR
     float imgH = img.getHeight() * scale;
     intersectRect.set(position, imgW, imgH);
     
-    if (alive && position.y <= stageRect.getBottom()) {
+    if (alive && position.y <= stageRect.getBottom() - imgH/2) {
         if (!win) {
             position.y -= gravity * 1.2;
         } else {

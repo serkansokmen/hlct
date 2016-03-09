@@ -10,7 +10,7 @@
 #define HLCT_MIN_DURATION               10      // game minimum duration in seconds (used mainly in gui slider)
 #define HLCT_MAX_DURATION               200     // game maximum duration in seconds (used mainly in gui slider)
 
-#define HLCT_HERO_BOTTOM                120     // hero position from bottom in pixels
+#define HLCT_HERO_BOTTOM                240     // hero position from bottom in pixels
 #define HLCT_CLAMP_STAGE                100     // stage left/right clamp in pixels
 
 
@@ -35,3 +35,5 @@
 #define HLCT_MAX_BAIT_SCALE             2.f
 #define HLCT_MIN_LIVE_SCALE             .25f
 #define HLCT_MAX_LIVE_SCALE             4.f
+
+#define HLCT_ANIM_UPDATE_CYCLE          1.f / 60.f

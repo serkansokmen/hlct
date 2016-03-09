@@ -39,7 +39,7 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
 
 void hlct::InfoScreen::update(){
 
-    timer->update(1.f/60.f);
+    timer->update(HLCT_ANIM_UPDATE_CYCLE);
     
     int idx = (int)timer->getCurrentValue();
     if (idx == paragraphs.size() && idx != 0) {
