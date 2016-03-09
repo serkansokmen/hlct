@@ -94,14 +94,17 @@ namespace hlct {
         void endGame();
         void addRandomHelmet();
         
-        inline bool isRunning(){
-            return state == GAME_STATE_GAME;
-        };
         inline void mouseMoved(int x, int y){
             if (!useOsc) {
 //                hero.moveTo(ofVec2f(x, hero.getPosition().y));
                 hero.moveTo(ofVec2f(x, y));
             }
+        };
+        inline void resize(const ofRectangle& stageRect){
+            this->stageRect.set(stageRect);
+        };
+        inline bool isRunning(){
+            return state == GAME_STATE_GAME;
         };
         
         ofParameterGroup    params;
@@ -109,6 +112,7 @@ namespace hlct {
         ofParameter<float>  scaleHero;
         ofParameter<float>  scaleBait;
         ofParameter<float>  scaleBaitWin;
+        ofParameter<float>  offsetBaitWin;
         ofParameter<float>  scaleLive;
         ofParameter<float>  currentTime;
         ofParameter<int>    endTime;

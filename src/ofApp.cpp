@@ -71,6 +71,11 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+    ofRectangle gameRect;
+    gameRect.setFromCenter(ofGetWindowRect().getCenter(),
+                           w - HLCT_CLAMP_STAGE,
+                           h - HLCT_CLAMP_STAGE);
+    game.resize(gameRect);
 }
 
 //--------------------------------------------------------------
