@@ -1,3 +1,5 @@
 ofxOsc
 ofxGui
 ofxAnimatable
+ofxSmartFont
+ofxParagraph

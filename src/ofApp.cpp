@@ -8,41 +8,33 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofBackground(0);
     ofSetFrameRate(60);
-    ofSetWindowTitle("HLCT");
     ofEnableSmoothing();
     ofEnableAntiAliasing();
     
-    bgImg.load("game/background.png");
+    ofxSmartFont::add(HLCT_INFO_SCREEN_FONT_PATH, HLCT_INFO_SCREEN_FONT_SIZE, HLCT_INFO_SCREEN_FONT_NAME);
     
     ofParameterGroup params;
-    game.setup();
+    ofRectangle gameRect;
+    gameRect.setFromCenter(ofGetWindowRect().getCenter(),
+                           ofGetWidth() - HLCT_CLAMP_STAGE,
+                           ofGetHeight() - HLCT_CLAMP_STAGE);
+    game.setup(gameRect);
     params.add(game.params);
     gui.setup(params);
     
     gui.loadFromFile("settings.xml");
-    bDrawGui = true;
+    bDrawGui = false;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
     game.update();
-//    if (game.isRunning()){
-//        game.checkHelmetTouch(heroPosAnim->getCurrentPosition());
-//    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    bgImg.draw(0, 0);
     game.draw();
-    
-    if (game.isRunning()) {
-        ofSetColor(ofColor::red);
-        ofDrawCircle(game.getHeroPosition(), 20);
-        ofSetColor(ofColor::white);
-    }
     
     if (bDrawGui) {
         gui.draw();
@@ -69,10 +61,21 @@ void ofApp::keyPressed(int key){
     if (key == '2') {
         game.addRandomHelmet();
     }
+    if (key == 'O') {
+        game.useOsc = !game.useOsc;
+    }
+    if (key == 'P') {
+        game.bPaused = !game.bPaused;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+    ofRectangle gameRect;
+    gameRect.setFromCenter(ofGetWindowRect().getCenter(),
+                           w - HLCT_CLAMP_STAGE,
+                           h - HLCT_CLAMP_STAGE);
+    game.resize(gameRect);
 }
 
 //--------------------------------------------------------------

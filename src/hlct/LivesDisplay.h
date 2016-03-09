@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ImagePack.h"
+
 
 namespace hlct {
     
@@ -9,15 +11,15 @@ namespace hlct {
         ofRectangle drawRect;
         int         totalLives;
         
-        ofImage     imgLive;
-        ofImage     imgDead;
+        ofImage     full;
+        ofImage     dead;
         
     public:
-        void setup(const ofRectangle& rect,
-                   const int& totalLives,
-                   const string& liveImgPath,
-                   const string& deadImgPath);
+        void setup(const ImagePack& imgPack,
+                   const int& totalLives);
         
-        void draw(const int& livesLeft);
+        void draw(const ofRectangle& stageRect,
+                  const int& livesLeft,
+                  const float& scale);
     };
 }

@@ -1,32 +1,35 @@
 #include "LivesDisplay.h"
 
 
-void hlct::LivesDisplay::setup(const ofRectangle& rect, const int& totalLives, const string& liveImgPath, const string& deadImgPath){
+void hlct::LivesDisplay::setup(const hlct::ImagePack& imgPack,
+                               const int& totalLives){
     
-    this->drawRect.set(rect);
     this->totalLives = totalLives;
     
-    imgLive.load(liveImgPath);
-    imgDead.load(deadImgPath);
+    full.setFromPixels(imgPack.liveFull->getPixels());
+    dead.setFromPixels(imgPack.liveEmpty->getPixels());
 }
 
 
-void hlct::LivesDisplay::draw(const int& livesLeft){
-    float w = this->drawRect.getWidth();
-    float h = this->drawRect.getHeight();
+void hlct::LivesDisplay::draw(const ofRectangle& stageRect, const int& livesLeft, const float& scale){
+    
+    float iconW = full.getWidth() * scale;
+    float iconH = full.getHeight() * scale;
+    float rectX = stageRect.getWidth() - iconW * totalLives;
+    float rectY = 30;
     
     ofPushMatrix();
     ofPushStyle();
-    ofTranslate(this->drawRect.getTopLeft());
-    for (int i=0; i<this->totalLives; i++){
+    ofTranslate(rectX, rectY);
+    for (int i = 0; i < this->totalLives; i++){
         ofPushMatrix();
-        ofTranslate(w*i, 0);
+        ofTranslate(iconW * i, 0);
         if (i < livesLeft) {
             ofSetColor(ofColor::white, 200);
-            imgLive.draw(0, 0, w, h);
+            full.draw(0, 0, iconW, iconH);
         } else {
             ofSetColor(ofColor::white, 200);
-            imgDead.draw(0, 0, w, h);
+            dead.draw(0, 0, iconW, iconH);
         }
         ofPopMatrix();
     }

@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxSmartFont.h"
 #include "hlct/Game.h"
 
 
@@ -18,7 +19,6 @@ public:
     void keyPressed(int key);
     void windowResized(int w, int h);
     
-    ofImage             bgImg;
     hlct::Game          game;
     
     ofxPanel            gui;
