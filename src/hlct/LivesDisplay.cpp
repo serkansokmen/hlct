@@ -1,13 +1,20 @@
 #include "LivesDisplay.h"
 
 
-void hlct::LivesDisplay::setup(const ofRectangle& rect, const int& totalLives, const string& liveImgPath, const string& deadImgPath){
+void hlct::LivesDisplay::setup(const ofRectangle& stageRect,
+                               const hlct::ImagePack& imgPack,
+                               const int& totalLives){
     
-    this->drawRect.set(rect);
+    float x = stageRect.getWidth() - imgPack.liveFull->getWidth()*totalLives*0.5 - 70;
+    float y = 30;
+    float w = imgPack.liveFull->getWidth()*0.5;
+    float h = imgPack.liveFull->getHeight()*0.5;
+    
+    this->drawRect.set(ofRectangle(x, y, w, h));
     this->totalLives = totalLives;
     
-    imgLive.load(liveImgPath);
-    imgDead.load(deadImgPath);
+    full.setFromPixels(imgPack.liveFull->getPixels());
+    dead.setFromPixels(imgPack.liveEmpty->getPixels());
 }
 
 
@@ -23,10 +30,10 @@ void hlct::LivesDisplay::draw(const int& livesLeft){
         ofTranslate(w*i, 0);
         if (i < livesLeft) {
             ofSetColor(ofColor::white, 200);
-            imgLive.draw(0, 0, w, h);
+            full.draw(0, 0, w, h);
         } else {
             ofSetColor(ofColor::white, 200);
-            imgDead.draw(0, 0, w, h);
+            dead.draw(0, 0, w, h);
         }
         ofPopMatrix();
     }

@@ -146,6 +146,7 @@
 		E6107C2D1C8E315B00B7DC7A /* OscReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
 		E6107C2E1C8E315B00B7DC7A /* OscTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
 		E6107C2F1C8E315B00B7DC7A /* OscTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		E6A3C7621C9070D900E6891A /* ImagePack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImagePack.h; path = hlct/ImagePack.h; sourceTree = "<group>"; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
 		F7CFEE77982205D3F1496C03 /* ofxAnimatable.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAnimatable.cpp; path = ../../../addons/ofxAnimatable/src/ofxAnimatable.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -224,6 +225,7 @@
 				E60DBDC21C8E701E00D2B2D4 /* LivesDisplay.cpp */,
 				E60DBDBC1C8E6ECE00D2B2D4 /* ImageSwitcher.h */,
 				E60DBDBB1C8E6ECE00D2B2D4 /* ImageSwitcher.cpp */,
+				E6A3C7621C9070D900E6891A /* ImagePack.h */,
 			);
 			name = hlct;
 			sourceTree = "<group>";

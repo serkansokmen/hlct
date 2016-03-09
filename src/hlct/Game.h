@@ -61,7 +61,6 @@ namespace hlct {
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         
         ofVec2f                     heroPos;
-        ofImage                     bgImg;
         GameAsset                   gameAsset;
         GameState                   state;
         LivesDisplay                livesDisplay;
@@ -70,9 +69,8 @@ namespace hlct {
         ofRectangle                 stageRect, loadingBarRect;
         
         ofxOscReceiver              receiver;
+        ImagePack                   imgPack;
         
-        ofImage                     heroImg, helmetImg, helmetWhiteImg, helmetOutlineImg;
-        ofImage                     receivedImage;
         float                       startTime;
         int                         livesLeft;
         bool                        timerEnd;
@@ -82,6 +80,7 @@ namespace hlct {
         
     public:
         
+        Game();
         ~Game();
         
         void setup(const ofRectangle& stageRect);
