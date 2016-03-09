@@ -16,8 +16,8 @@ namespace hlct {
         ofRectangle stageRect;
         
     public:
-        void setup(const ofPixels& helmetPixels, const int& sectionIndex, const ofRectangle& stageRect);
-        void update(const ofRectangle& heroRect, const float& scale);
+        void setup(const ofRectangle& stageRect, const ofPixels& helmetPixels, const int& sectionIndex);
+        void update(const ofRectangle& stageRect, const ofRectangle& heroRect, const float& scale);
         void draw();
         
         inline const ofVec2f& getPosition() {

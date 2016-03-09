@@ -59,6 +59,7 @@ void hlct::Game::setup(const ofRectangle& rect){
     params.add(scaleHero.set("Hero Scale", HLCT_MAX_HERO_SCALE/2, HLCT_MIN_HERO_SCALE, HLCT_MAX_HERO_SCALE));
     params.add(scaleBait.set("Dropping Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
     params.add(scaleBaitWin.set("Win Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
+    params.add(offsetBaitWin.set("Win Helmet Offset", 0, -200, 200));
     params.add(scaleLive.set("Live Icon Scale", HLCT_MAX_LIVE_SCALE/2, HLCT_MIN_LIVE_SCALE, HLCT_MAX_LIVE_SCALE));
     params.add(currentTimeStr.set("Curent Time", "0"));
     params.add(bPaused.set("Paused", false));
@@ -198,13 +199,13 @@ void hlct::Game::update(){
                     heroRect.set(hero.getRectangle());
                     ofRectangle wRect(heroRect);
                     for (auto h : helmets){
-                        h->update(heroRect, scaleBait);
+                        h->update(stageRect, heroRect, scaleBait);
                     }
                     
                     int wi = 0;
                     for (auto h : winHelmets){
-                        wRect.setY(heroRect.getTop() - h->getHeight()*0.15*wi + h->getHeight());
-                        h->update(wRect, scaleBaitWin);
+                        wRect.setY(heroRect.getTop() - h->getHeight() * 0.15 * wi + offsetBaitWin);
+                        h->update(stageRect, wRect, scaleBaitWin);
                         wi++;
                     }
                     for (int i=0; i<helmets.size(); ++i){
@@ -266,8 +267,6 @@ void hlct::Game::draw(){
             break;
         }
         case GAME_STATE_GAME: {
-            ofSetColor(ofColor::green);
-            ofDrawRectangle(hero.getRectangle());
             ofSetColor(ofColor::white);
             hero.draw();
             for (auto h : winHelmets){
@@ -335,7 +334,7 @@ void hlct::Game::endGame(){
 void hlct::Game::addRandomHelmet(){
     shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
     helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
-    helmet->setup(imgPack.bait->getPixels(), helmetSection, stageRect);
+    helmet->setup(stageRect, imgPack.bait->getPixels(), helmetSection);
     helmets.push_back(helmet);
 }
 
