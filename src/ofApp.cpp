@@ -66,6 +66,9 @@ void ofApp::keyPressed(int key){
     if (key == 'O') {
         game.useOsc = !game.useOsc;
     }
+    if (key == 'P') {
+        game.bPaused = !game.bPaused;
+    }
 }
 
 //--------------------------------------------------------------
