@@ -196,7 +196,7 @@ void hlct::Game::update(){
                         addRandomHelmet();
                     }
                     ofRectangle heroRect;
-                    heroRect.set(hero.getRectangle());
+                    heroRect.set(hero.getHitRectangle());
                     ofRectangle wRect(heroRect);
                     for (auto h : helmets){
                         h->update(stageRect, heroRect, scaleBait);

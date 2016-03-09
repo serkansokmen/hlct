@@ -17,6 +17,10 @@ void hlct::Hero::update(const ofRectangle& stageRect, const float& scale){
                                stageRect.getY() + stageRect.getHeight() - img.getHeight() * scale,
                                stageRect.getY() + stageRect.getHeight() + img.getHeight() * scale);
     this->intersectRect.set(position, img.getWidth() * scale, img.getHeight() * scale);
+    
+    this->headRect.setFromCenter(position, intersectRect.getWidth() * 0.75, intersectRect.getWidth() * 0.75);
+    this->headRect.setX((intersectRect.getWidth() - headRect.getWidth())/2 + intersectRect.getLeft());
+    this->headRect.setY(intersectRect.getTop());
 }
 
 void hlct::Hero::draw(){
