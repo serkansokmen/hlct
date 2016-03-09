@@ -4,12 +4,14 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-    ofSetLogLevel(OF_LOG_NOTICE);
+    ofSetLogLevel(OF_LOG_WARNING);
     ofSetVerticalSync(true);
     ofBackground(0);
     ofSetFrameRate(60);
     ofEnableSmoothing();
     ofEnableAntiAliasing();
+    
+    ofxSmartFont::add(HLCT_INFO_SCREEN_FONT_PATH, HLCT_INFO_SCREEN_FONT_SIZE, HLCT_INFO_SCREEN_FONT_NAME);
     
     ofParameterGroup params;
     ofRectangle gameRect;
@@ -26,11 +28,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
     game.update();
-//    if (game.isRunning()){
-//        game.checkHelmetTouch(heroPosAnim->getCurrentPosition());
-//    }
 }
 
 //--------------------------------------------------------------
@@ -66,10 +64,18 @@ void ofApp::keyPressed(int key){
     if (key == 'O') {
         game.useOsc = !game.useOsc;
     }
+    if (key == 'P') {
+        game.bPaused = !game.bPaused;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+    ofRectangle gameRect;
+    gameRect.setFromCenter(ofGetWindowRect().getCenter(),
+                           w - HLCT_CLAMP_STAGE,
+                           h - HLCT_CLAMP_STAGE);
+    game.resize(gameRect);
 }
 
 //--------------------------------------------------------------

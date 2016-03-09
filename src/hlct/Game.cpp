@@ -1,6 +1,7 @@
 #include "Game.h"
 
 hlct::Game::Game(){
+    // Asset pack
     imgPack.brand->load("game/helmet.png");
     imgPack.hero->load("game/hero.png");
     imgPack.liveFull->load("game/live-full.png");
@@ -9,14 +10,9 @@ hlct::Game::Game(){
     
     // Create a smaller version of brand helmet to use as bait
     ofImage baitImg;
-    float sclBait = .5f;
     baitImg.setFromPixels(imgPack.brand->getPixels());
-    baitImg.resize(baitImg.getWidth()*sclBait, baitImg.getHeight()*sclBait);
+    baitImg.resize(baitImg.getWidth(), baitImg.getHeight());
     imgPack.bait->setFromPixels(baitImg.getPixels());
-    
-    // Scale hero to half
-    float sclHero = .75f;
-    imgPack.hero->resize(imgPack.hero->getWidth()*sclHero, imgPack.hero->getHeight()*sclHero);
 }
 
 hlct::Game::~Game(){
@@ -38,7 +34,8 @@ void hlct::Game::setup(const ofRectangle& rect){
     
     state = GAME_STATE_TITLE;
     
-    heroPos = ofVec2f(stageRect.getWidth()/2, stageRect.getHeight() - HLCT_HERO_BOTTOM);
+    hero.setup(ofVec2f(stageRect.getWidth()/2, stageRect.getHeight() - HLCT_HERO_BOTTOM),
+               imgPack.hero->getPixels());
     
     gameStartTimer.setDuration(HLCT_USER_POSE_DURATION);
     gameStartTimer.setCurve(LINEAR);
@@ -54,9 +51,16 @@ void hlct::Game::setup(const ofRectangle& rect){
                              stageRect.getCenter().y + 200,
                              400, 25);
     
+    livesDisplay.setup(imgPack, HLCT_LIVES);
+    
     params.setName("Game");
     params.add(bStart.set("New Game", false));
     params.add(endTime.set("Game Duration", HLCT_MIN_DURATION, HLCT_MIN_DURATION, HLCT_MAX_DURATION));
+    params.add(scaleHero.set("Hero Scale", HLCT_MAX_HERO_SCALE/2, HLCT_MIN_HERO_SCALE, HLCT_MAX_HERO_SCALE));
+    params.add(scaleBait.set("Dropping Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
+    params.add(scaleBaitWin.set("Win Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
+    params.add(offsetBaitWin.set("Win Helmet Offset", 0, -200, 200));
+    params.add(scaleLive.set("Live Icon Scale", HLCT_MAX_LIVE_SCALE/2, HLCT_MIN_LIVE_SCALE, HLCT_MAX_LIVE_SCALE));
     params.add(currentTimeStr.set("Curent Time", "0"));
     params.add(bPaused.set("Paused", false));
     
@@ -74,8 +78,6 @@ void hlct::Game::setup(const ofRectangle& rect){
     bAddHelmet.addListener(this, &Game::handleAddHelmet);
     
     receiver.setup(HLCT_OSC_PORT);
-    
-    livesDisplay.setup(stageRect, imgPack, HLCT_LIVES);
 }
 
 
@@ -93,8 +95,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "COLLECT ALL HARD HATS!";
     messages.push_back(msg);
     screenTitle.setup(stageRect,
-                      HLCT_INFO_SCREEN_FONT_PATH,
-                      HLCT_INFO_SCREEN_FONT_SIZE,
                       HLCT_INFO_SCREEN_DURATION,
                       imgPack.brand->getPixels(),
                       messages);
@@ -104,8 +104,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "PLEASE WAIT IN RANGE...";
     messages.push_back(msg);
     screenPosing.setup(stageRect,
-                       HLCT_INFO_SCREEN_FONT_PATH,
-                       HLCT_INFO_SCREEN_FONT_SIZE,
                        HLCT_INFO_SCREEN_DURATION,
                        imgPack.brand->getPixels(),
                        messages);
@@ -117,8 +115,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "YOU ARE IN SAFE NOW!";
     messages.push_back(msg);
     screenWin.setup(stageRect,
-                    HLCT_INFO_SCREEN_FONT_PATH,
-                    HLCT_INFO_SCREEN_FONT_SIZE,
                     HLCT_INFO_SCREEN_DURATION,
                     imgPack.brand->getPixels(),
                     messages);
@@ -130,8 +126,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "BE CAREFUL!";
     messages.push_back(msg);
     screenLoose.setup(stageRect,
-                      HLCT_INFO_SCREEN_FONT_PATH,
-                      HLCT_INFO_SCREEN_FONT_SIZE,
                       HLCT_INFO_SCREEN_DURATION,
                       imgPack.brand->getPixels(),
                       messages);
@@ -165,7 +159,7 @@ void hlct::Game::update(){
             }
             if (m.getAddress() == HLCT_OSC_ENDPOINT_POSITION){
                 float x = ofClamp(ofMap(m.getArgAsFloat(0), 0, 1, 0, stageRect.getWidth()), HLCT_CLAMP_STAGE, ofGetWidth()-HLCT_CLAMP_STAGE);
-                heroPos.x = x;
+                hero.moveTo(ofVec2f(x, hero.getPosition().y));
             }
             if (m.getAddress() == HLCT_OSC_ENDPOINT_NEW){
                 bStart = m.getArgAsBool(0);
@@ -191,6 +185,7 @@ void hlct::Game::update(){
             
             if (!bPaused){
                 gameTimer.update(dt);
+                hero.update(stageRect, scaleHero);
                 currentTime.set(gameTimer.getCurrentValue());
                 currentTimeStr = ofToString(currentTime);
                 
@@ -200,16 +195,17 @@ void hlct::Game::update(){
                     if (helmets.size() == 0) {
                         addRandomHelmet();
                     }
-                    ofRectangle heroRect(heroPos, imgPack.hero->getWidth(), imgPack.hero->getHeight());
+                    ofRectangle heroRect;
+                    heroRect.set(hero.getRectangle());
                     ofRectangle wRect(heroRect);
                     for (auto h : helmets){
-                        h->update(heroRect);
+                        h->update(stageRect, heroRect, scaleBait);
                     }
                     
                     int wi = 0;
                     for (auto h : winHelmets){
-                        wRect.setY(heroRect.getTop() - h->getHeight()*0.15*wi + h->getHeight());
-                        h->update(wRect);
+                        wRect.setY(heroRect.getTop() - h->getHeight() * 0.15 * wi + offsetBaitWin);
+                        h->update(stageRect, wRect, scaleBaitWin);
                         wi++;
                     }
                     for (int i=0; i<helmets.size(); ++i){
@@ -272,14 +268,14 @@ void hlct::Game::draw(){
         }
         case GAME_STATE_GAME: {
             ofSetColor(ofColor::white);
-            imgPack.hero->draw(heroPos);
+            hero.draw();
             for (auto h : winHelmets){
                 h->draw();
             }
             for (auto h : helmets){
                 h->draw();
             }
-            livesDisplay.draw(livesLeft);
+            livesDisplay.draw(stageRect, livesLeft, scaleLive);
             break;
         }
         case GAME_STATE_END_LOOSE:
@@ -338,7 +334,7 @@ void hlct::Game::endGame(){
 void hlct::Game::addRandomHelmet(){
     shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
     helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
-    helmet->setup(imgPack.bait->getPixels(), helmetSection, stageRect);
+    helmet->setup(stageRect, imgPack.bait->getPixels(), helmetSection);
     helmets.push_back(helmet);
 }
 

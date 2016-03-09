@@ -26,3 +26,12 @@
 #define HLCT_INFO_SCREEN_FONT_PATH      "font/Kollektif-Bold.ttf"   // info screen font path
 #define HLCT_INFO_SCREEN_FONT_SIZE      85                          // info screen font size
 #define HLCT_INFO_SCREEN_DURATION       2                           // seconds for info screen message switch timer
+#define HLCT_INFO_SCREEN_FONT_NAME      "kollektif_bold_85"         // used internally
+
+// Scale min/max
+#define HLCT_MIN_HERO_SCALE             .5f
+#define HLCT_MAX_HERO_SCALE             2.f
+#define HLCT_MIN_BAIT_SCALE             .5f
+#define HLCT_MAX_BAIT_SCALE             2.f
+#define HLCT_MIN_LIVE_SCALE             .25f
+#define HLCT_MAX_LIVE_SCALE             4.f
