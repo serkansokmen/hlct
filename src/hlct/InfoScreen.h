@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Constants.h"
+#include "ofxSmartFont.h"
 #include "ofxParagraph.h"
 #include "ofxAnimatableFloat.h"
 
@@ -26,8 +27,6 @@ namespace hlct {
         InfoScreen();
         
         void setup(const ofRectangle& stageRect,
-                   const string& fontPath,
-                   const int& fontSize,
                    const float& messageDuration,
                    const ofPixels& pixels, vector<string> messages);
         void update();

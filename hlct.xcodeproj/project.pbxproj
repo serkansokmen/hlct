@@ -39,6 +39,7 @@
 		E6107C3B1C8E315B00B7DC7A /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2E1C8E315B00B7DC7A /* OscTypes.cpp */; };
 		E6A3C7691C908D6100E6891A /* ofxParagraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C7671C908D6100E6891A /* ofxParagraph.cpp */; };
 		E6A3C76E1C90939600E6891A /* ofxSmartFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C76C1C90939600E6891A /* ofxSmartFont.cpp */; };
+		E6A3C7721C90B4E900E6891A /* Hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C7701C90B4E900E6891A /* Hero.cpp */; };
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
 /* End PBXBuildFile section */
 
@@ -150,6 +151,8 @@
 		E6A3C7681C908D6100E6891A /* ofxParagraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxParagraph.h; sourceTree = "<group>"; };
 		E6A3C76C1C90939600E6891A /* ofxSmartFont.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSmartFont.cpp; sourceTree = "<group>"; };
 		E6A3C76D1C90939600E6891A /* ofxSmartFont.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSmartFont.h; sourceTree = "<group>"; };
+		E6A3C7701C90B4E900E6891A /* Hero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hero.cpp; path = hlct/Hero.cpp; sourceTree = "<group>"; };
+		E6A3C7711C90B4E900E6891A /* Hero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hero.h; path = hlct/Hero.h; sourceTree = "<group>"; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
 		F7CFEE77982205D3F1496C03 /* ofxAnimatable.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAnimatable.cpp; path = ../../../addons/ofxAnimatable/src/ofxAnimatable.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -221,6 +224,8 @@
 				E60DBDB71C8E6DAA00D2B2D4 /* Game.cpp */,
 				500DFA698EC2145C0A785894 /* InfoScreen.h */,
 				E60DBDBE1C8E6F1E00D2B2D4 /* InfoScreen.cpp */,
+				E6A3C7711C90B4E900E6891A /* Hero.h */,
+				E6A3C7701C90B4E900E6891A /* Hero.cpp */,
 				A56904437B0DE34E18632717 /* Helmet.h */,
 				E60DBDC01C8E6FAC00D2B2D4 /* Helmet.cpp */,
 				118F03C9D403F32F4D64E7FA /* LivesDisplay.h */,
@@ -557,6 +562,7 @@
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				E6107C3A1C8E315B00B7DC7A /* OscReceivedElements.cpp in Sources */,
 				E6107C311C8E315B00B7DC7A /* ofxOscMessage.cpp in Sources */,
+				E6A3C7721C90B4E900E6891A /* Hero.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,

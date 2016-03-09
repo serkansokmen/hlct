@@ -34,7 +34,8 @@ void hlct::Game::setup(const ofRectangle& rect){
     
     state = GAME_STATE_TITLE;
     
-    heroPos = ofVec2f(stageRect.getWidth()/2, stageRect.getHeight() - HLCT_HERO_BOTTOM);
+    hero.setup(ofVec2f(stageRect.getWidth()/2, stageRect.getHeight() - HLCT_HERO_BOTTOM),
+               imgPack.hero->getPixels());
     
     gameStartTimer.setDuration(HLCT_USER_POSE_DURATION);
     gameStartTimer.setCurve(LINEAR);
@@ -93,8 +94,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "COLLECT ALL HARD HATS!";
     messages.push_back(msg);
     screenTitle.setup(stageRect,
-                      HLCT_INFO_SCREEN_FONT_PATH,
-                      HLCT_INFO_SCREEN_FONT_SIZE,
                       HLCT_INFO_SCREEN_DURATION,
                       imgPack.brand->getPixels(),
                       messages);
@@ -104,8 +103,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "PLEASE WAIT IN RANGE...";
     messages.push_back(msg);
     screenPosing.setup(stageRect,
-                       HLCT_INFO_SCREEN_FONT_PATH,
-                       HLCT_INFO_SCREEN_FONT_SIZE,
                        HLCT_INFO_SCREEN_DURATION,
                        imgPack.brand->getPixels(),
                        messages);
@@ -117,8 +114,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "YOU ARE IN SAFE NOW!";
     messages.push_back(msg);
     screenWin.setup(stageRect,
-                    HLCT_INFO_SCREEN_FONT_PATH,
-                    HLCT_INFO_SCREEN_FONT_SIZE,
                     HLCT_INFO_SCREEN_DURATION,
                     imgPack.brand->getPixels(),
                     messages);
@@ -130,8 +125,6 @@ void hlct::Game::setupInfoScreens(){
     msg = "BE CAREFUL!";
     messages.push_back(msg);
     screenLoose.setup(stageRect,
-                      HLCT_INFO_SCREEN_FONT_PATH,
-                      HLCT_INFO_SCREEN_FONT_SIZE,
                       HLCT_INFO_SCREEN_DURATION,
                       imgPack.brand->getPixels(),
                       messages);
@@ -165,7 +158,7 @@ void hlct::Game::update(){
             }
             if (m.getAddress() == HLCT_OSC_ENDPOINT_POSITION){
                 float x = ofClamp(ofMap(m.getArgAsFloat(0), 0, 1, 0, stageRect.getWidth()), HLCT_CLAMP_STAGE, ofGetWidth()-HLCT_CLAMP_STAGE);
-                heroPos.x = x;
+                hero.moveTo(ofVec2f(x, hero.getPosition().y));
             }
             if (m.getAddress() == HLCT_OSC_ENDPOINT_NEW){
                 bStart = m.getArgAsBool(0);
@@ -191,6 +184,7 @@ void hlct::Game::update(){
             
             if (!bPaused){
                 gameTimer.update(dt);
+                hero.update(stageRect, scaleHero);
                 currentTime.set(gameTimer.getCurrentValue());
                 currentTimeStr = ofToString(currentTime);
                 
@@ -200,7 +194,8 @@ void hlct::Game::update(){
                     if (helmets.size() == 0) {
                         addRandomHelmet();
                     }
-                    ofRectangle heroRect(heroPos, imgPack.hero->getWidth(), imgPack.hero->getHeight());
+                    ofRectangle heroRect;
+                    heroRect.set(hero.getRectangle());
                     ofRectangle wRect(heroRect);
                     for (auto h : helmets){
                         h->update(heroRect, scaleBait);
@@ -272,9 +267,9 @@ void hlct::Game::draw(){
         }
         case GAME_STATE_GAME: {
             ofSetColor(ofColor::green);
-            ofDrawRectangle(heroPos, imgPack.hero->getWidth()*scaleHero, imgPack.hero->getHeight()*scaleHero);
+            ofDrawRectangle(hero.getRectangle());
             ofSetColor(ofColor::white);
-            imgPack.hero->draw(heroPos, imgPack.hero->getWidth()*scaleHero, imgPack.hero->getHeight()*scaleHero);
+            hero.draw();
             for (auto h : winHelmets){
                 h->draw();
             }

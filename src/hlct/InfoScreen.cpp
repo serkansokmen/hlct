@@ -6,12 +6,12 @@ hlct::InfoScreen::InfoScreen(){
     timer->setup();
     timer->setRepeatType(LOOP_BACK_AND_FORTH);
     timer->setCurve(LINEAR);
+    
+    paragraphIndex = -1;
 }
 
 
 void hlct::InfoScreen::setup(const ofRectangle& stageRect,
-                             const string& fontPath,
-                             const int& fontSize,
                              const float& messageDuration,
                              const ofPixels& pixels, vector<string> messages){
     
@@ -20,8 +20,11 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
     
     for (auto msg : messages){
         ofxParagraph p = ofxParagraph(msg, stageRect.getWidth()/2);
-        p.setFont(fontPath, fontSize);
         p.setWidth(stageRect.getWidth()/2);
+        shared_ptr<ofxSmartFont> font = ofxSmartFont::get(HLCT_INFO_SCREEN_FONT_NAME);
+        if (font){
+            p.setFont(font);
+        }
         p.setAlignment(ofxParagraph::ALIGN_CENTER);
         p.setColor(ofColor::white);
         p.setSpacing(40);
@@ -62,7 +65,9 @@ void hlct::InfoScreen::update(){
 
 
 void hlct::InfoScreen::draw(){
-    auto p = paragraphs[paragraphIndex];
-    image.draw(rectImage);
-    p.draw(rectParagraph.getLeft(), rectParagraph.getTop());
+    if (this->paragraphIndex != -1){
+        auto p = paragraphs[paragraphIndex];
+        image.draw(rectImage);
+        p.draw(rectParagraph.getLeft(), rectParagraph.getTop());
+    }
 }

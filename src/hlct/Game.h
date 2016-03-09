@@ -6,6 +6,7 @@
 #include "ofxAnimatableFloat.h"
 #include "ofxAnimatableOfPoint.h"
 
+#include "Hero.h"
 #include "Helmet.h"
 #include "GameState.h"
 #include "InfoScreen.h"
@@ -62,24 +63,24 @@ namespace hlct {
         void setupInfoScreens();
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         
-        ofVec2f                     heroPos;
         std::map<string, InfoScreen> screens;
         
-        GameState                   state;
-        LivesDisplay                livesDisplay;
+        hlct::Hero                  hero;
+        hlct::GameState             state;
+        hlct::LivesDisplay          livesDisplay;
+        hlct::ImagePack             imgPack;
         
         ofxAnimatableFloat          gameStartTimer, gameTimer, gameEndTimer;
         ofRectangle                 stageRect, loadingBarRect;
         
         ofxOscReceiver              receiver;
-        ImagePack                   imgPack;
         
         float                       startTime;
         int                         livesLeft;
         bool                        timerEnd;
         
-        vector<shared_ptr<Helmet>>  helmets;
-        vector<shared_ptr<Helmet>>  winHelmets;
+        vector<shared_ptr<hlct::Helmet > >  helmets;
+        vector<shared_ptr<hlct::Helmet > >  winHelmets;
         
     public:
         
@@ -96,12 +97,10 @@ namespace hlct {
         inline bool isRunning(){
             return state == GAME_STATE_GAME;
         };
-        inline ofVec2f getHeroPosition(){
-            return heroPos;
-        };
         inline void mouseMoved(int x, int y){
             if (!useOsc) {
-                heroPos.x = x;
+//                hero.moveTo(ofVec2f(x, hero.getPosition().y));
+                hero.moveTo(ofVec2f(x, y));
             }
         };
         
