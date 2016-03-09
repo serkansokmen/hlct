@@ -15,7 +15,7 @@ void hlct::LivesDisplay::draw(const ofRectangle& stageRect, const int& livesLeft
     
     float iconW = full.getWidth() * scale;
     float iconH = full.getHeight() * scale;
-    float rectX = stageRect.getWidth() - iconW * totalLives * 0.5 - 70;
+    float rectX = stageRect.getWidth() - iconW * totalLives;
     float rectY = 30;
     
     ofPushMatrix();
