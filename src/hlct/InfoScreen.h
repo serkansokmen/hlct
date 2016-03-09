@@ -32,8 +32,8 @@ namespace hlct {
         void update();
         void draw();
         
-        float getHeight(){
-            return drawRect.getHeight();
+        const ofRectangle& getContainerRectangle(){
+            return drawRect;
         }
     };
 }

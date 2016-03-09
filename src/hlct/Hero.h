@@ -9,7 +9,9 @@ namespace hlct {
         ofImage img;
         ofVec2f position;
         float   scale;
+        
         ofRectangle intersectRect;
+        ofRectangle headRect;
         ofRectangle stageRect;
         
     public:
@@ -22,10 +24,10 @@ namespace hlct {
                                position.y);
         }
         inline const ofVec2f& getPosition() {
-            return position;
+            return this->position;
         }
-        inline ofRectangle getRectangle() {
-            return intersectRect;
+        inline const ofRectangle& getHitRectangle() {
+            return this->headRect;
         }
     };
 }
