@@ -5,8 +5,8 @@
 
 
 int main(){
-    int windowWidth = 1728;
-    int windowHeight = 768;
+    int windowWidth = 1440;
+    int windowHeight = 900;
     ofSetupOpenGL(windowWidth, windowHeight, OF_WINDOW);
     ofRunApp(new ofApp());
 }
