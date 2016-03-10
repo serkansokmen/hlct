@@ -10,7 +10,6 @@
 #define HLCT_MIN_DURATION               10      // game minimum duration in seconds (used mainly in gui slider)
 #define HLCT_MAX_DURATION               200     // game maximum duration in seconds (used mainly in gui slider)
 
-#define HLCT_HERO_BOTTOM                240     // hero position from bottom in pixels
 #define HLCT_CLAMP_STAGE                100     // stage left/right clamp in pixels
 
 
@@ -24,16 +23,23 @@
 #define HLCT_OSC_ENDPOINT_PAUSE         "/hlct/pause"
 
 #define HLCT_INFO_SCREEN_FONT_PATH      "font/Kollektif-Bold.ttf"   // info screen font path
-#define HLCT_INFO_SCREEN_FONT_SIZE      85                          // info screen font size
+#define HLCT_INFO_SCREEN_FONT_SIZE      75                          // info screen font size
 #define HLCT_INFO_SCREEN_DURATION       2                           // seconds for info screen message switch timer
 #define HLCT_INFO_SCREEN_FONT_NAME      "kollektif_bold_85"         // used internally
+#define HLCT_LOADING_BAR_OFFSET_BOTTOM  40
 
 // Scale min/max
-#define HLCT_MIN_HERO_SCALE             .5f
-#define HLCT_MAX_HERO_SCALE             2.f
-#define HLCT_MIN_BAIT_SCALE             .5f
-#define HLCT_MAX_BAIT_SCALE             2.f
-#define HLCT_MIN_LIVE_SCALE             .25f
-#define HLCT_MAX_LIVE_SCALE             4.f
+#define HLCT_HERO_SCALE_MIN             .5f
+#define HLCT_HERO_SCALE_MAX             2.f
+#define HLCT_BAIT_SCALE_MIN             .25f
+#define HLCT_BAIT_SCALE_MAX             1.f
+#define HLCT_LIVE_SCALE_MIN             .25f
+#define HLCT_LIVE_SCALE_MAX             4.f
+#define HLCT_BAIT_OFFSET_MIN            -200
+#define HLCT_BAIT_OFFSET_MAX            200
+#define HLCT_BAIT_WIN_OFFSET_MIN        -200
+#define HLCT_BAIT_WIN_OFFSET_MAX        200
+#define HLCT_BAIT_WIN_DIFF_MIN          0.f
+#define HLCT_BAIT_WIN_DIFF_MAX          1.f
 
 #define HLCT_ANIM_UPDATE_CYCLE          1.f / 60.f

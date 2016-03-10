@@ -15,15 +15,18 @@ void hlct::LivesDisplay::draw(const ofRectangle& stageRect, const int& livesLeft
     
     float iconW = full.getWidth() * scale;
     float iconH = full.getHeight() * scale;
-    float rectX = stageRect.getWidth() - iconW * totalLives;
-    float rectY = 30;
+    float rectW = stageRect.getWidth();
+    float rectH = stageRect.getHeight();
+    float rectX = rectW - iconW * totalLives;
+    float rectY = 0;
     
     ofPushMatrix();
     ofPushStyle();
-    ofTranslate(rectX, rectY);
+    ofTranslate(stageRect.getTopRight());
+    ofTranslate(-iconW * this->totalLives, -iconH / 2);
     for (int i = 0; i < this->totalLives; i++){
         ofPushMatrix();
-        ofTranslate(iconW * i, 0);
+        ofTranslate(iconW * i, iconH/2);
         if (i < livesLeft) {
             ofSetColor(ofColor::white, 200);
             full.draw(0, 0, iconW, iconH);

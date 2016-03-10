@@ -7,7 +7,7 @@ hlct::InfoScreen::InfoScreen(){
     timer->setRepeatType(LOOP_BACK_AND_FORTH);
     timer->setCurve(LINEAR);
     
-    paragraphIndex = -1;
+    this->msgIndex = -1;
 }
 
 
@@ -16,20 +16,16 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
                              const ofPixels& pixels, vector<string> messages){
     
     this->stageRect.set(stageRect);
-    image.setFromPixels(pixels);
+    this->image.setFromPixels(pixels);
     
     for (auto msg : messages){
-        ofxParagraph p = ofxParagraph(msg, stageRect.getWidth()/2);
-        p.setWidth(stageRect.getWidth()/2);
-        shared_ptr<ofxSmartFont> font = ofxSmartFont::get(HLCT_INFO_SCREEN_FONT_NAME);
-        if (font){
-            p.setFont(font);
-        }
-        p.setAlignment(ofxParagraph::ALIGN_CENTER);
-        p.setColor(ofColor::white);
-        p.setSpacing(40);
-        p.setBorderPadding(40);
-        this->paragraphs.push_back(p);
+        ofxTextBlock t;
+//        shared_ptr<ofxSmartFont> font = ofxSmartFont::get(HLCT_INFO_SCREEN_FONT_NAME);
+        t.init(HLCT_INFO_SCREEN_FONT_PATH, HLCT_INFO_SCREEN_FONT_SIZE);
+        t.setText(msg);
+        t.setColor(255, 255, 255, 255);
+        t.wrapTextX(stageRect.getWidth()/2);
+        this->texts.push_back(t);
     }
     
     timer->setDuration(messageDuration);
@@ -37,37 +33,36 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
 }
 
 
-void hlct::InfoScreen::update(){
-
+void hlct::InfoScreen::update(const ofRectangle& stageRect){
+    this->stageRect.set(stageRect);
     timer->update(HLCT_ANIM_UPDATE_CYCLE);
     
     int idx = (int)timer->getCurrentValue();
-    if (idx == paragraphs.size() && idx != 0) {
+    if (idx == texts.size() && idx != 0) {
         idx--;
     }
-    this->paragraphIndex = idx;
-    
-    auto p = paragraphs[paragraphIndex];
+    this->msgIndex = idx;
+    auto t = texts[msgIndex];
     
     float imgW = image.getWidth();
     float imgH = image.getHeight();
     float rw = stageRect.getWidth();
     float rh = stageRect.getHeight();
-    float px = (rw - p.getWidth())/2;
-    float py = rectImage.getTop() + rectImage.getHeight() + 140;
+    float tx = (rw - t.getWidth())/2;
+    float ty = rectImage.getTop() + rectImage.getHeight();
     
-    this->rectImage.set((rw-imgW)/2,
-                        (rh-imgH)/2 - 100,
+    this->rectImage.set(stageRect.getX() + (rw-imgW)/2,
+                        stageRect.getY() + (rh-imgH)/2 - 100,
                         imgW, imgH);
-    this->rectParagraph.set(px, py, p.getWidth(), p.getHeight());
-    this->drawRect.set(px, rectImage.getTop(), p.getWidth(), imgH + rectImage.getHeight());
+    this->rectParagraph.set(stageRect.getX() + tx, stageRect.getY() + ty, t.getWidth(), t.getHeight());
+//    this->drawRect.set(tx, rectImage.getTop(), t.getWidth(), imgH + rectImage.getHeight());
 }
 
 
 void hlct::InfoScreen::draw(){
-    if (this->paragraphIndex != -1){
-        auto p = paragraphs[paragraphIndex];
+    if (this->msgIndex != -1){
         image.draw(rectImage);
-        p.draw(rectParagraph.getLeft(), rectParagraph.getTop());
+        auto t = texts[msgIndex];
+        t.drawCenter(rectParagraph.getCenter().x, rectImage.getBottom());
     }
 }

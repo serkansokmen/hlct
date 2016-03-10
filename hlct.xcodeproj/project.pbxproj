@@ -37,7 +37,7 @@
 		E6107C391C8E315B00B7DC7A /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2A1C8E315B00B7DC7A /* OscPrintReceivedElements.cpp */; };
 		E6107C3A1C8E315B00B7DC7A /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2C1C8E315B00B7DC7A /* OscReceivedElements.cpp */; };
 		E6107C3B1C8E315B00B7DC7A /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2E1C8E315B00B7DC7A /* OscTypes.cpp */; };
-		E6A3C7691C908D6100E6891A /* ofxParagraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C7671C908D6100E6891A /* ofxParagraph.cpp */; };
+		E6243BD41C911E5E0030C829 /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6243BD11C911E5E0030C829 /* ofxTextBlock.cpp */; };
 		E6A3C76E1C90939600E6891A /* ofxSmartFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C76C1C90939600E6891A /* ofxSmartFont.cpp */; };
 		E6A3C7721C90B4E900E6891A /* Hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C7701C90B4E900E6891A /* Hero.cpp */; };
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
@@ -146,9 +146,10 @@
 		E6107C2D1C8E315B00B7DC7A /* OscReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
 		E6107C2E1C8E315B00B7DC7A /* OscTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
 		E6107C2F1C8E315B00B7DC7A /* OscTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		E6243BD11C911E5E0030C829 /* ofxTextBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextBlock.cpp; sourceTree = "<group>"; };
+		E6243BD21C911E5E0030C829 /* ofxTextBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxTextBlock.h; sourceTree = "<group>"; };
+		E6243BD31C911E5E0030C829 /* ofxTextSuite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxTextSuite.h; sourceTree = "<group>"; };
 		E6A3C7621C9070D900E6891A /* ImagePack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImagePack.h; path = hlct/ImagePack.h; sourceTree = "<group>"; };
-		E6A3C7671C908D6100E6891A /* ofxParagraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxParagraph.cpp; sourceTree = "<group>"; };
-		E6A3C7681C908D6100E6891A /* ofxParagraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxParagraph.h; sourceTree = "<group>"; };
 		E6A3C76C1C90939600E6891A /* ofxSmartFont.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSmartFont.cpp; sourceTree = "<group>"; };
 		E6A3C76D1C90939600E6891A /* ofxSmartFont.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSmartFont.h; sourceTree = "<group>"; };
 		E6A3C7701C90B4E900E6891A /* Hero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hero.cpp; path = hlct/Hero.cpp; sourceTree = "<group>"; };
@@ -257,8 +258,8 @@
 				E6107C051C8E315B00B7DC7A /* ofxOsc */,
 				480A780D8D0308AE4A368801 /* ofxGui */,
 				8D83D7AC476703EBECC1932D /* ofxAnimatable */,
-				E6A3C7651C908D6100E6891A /* ofxParagraph */,
 				E6A3C76A1C90939600E6891A /* ofxSmartFont */,
+				E6243BCF1C911E5E0030C829 /* ofxTextSuite */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -401,22 +402,23 @@
 			path = osc;
 			sourceTree = "<group>";
 		};
-		E6A3C7651C908D6100E6891A /* ofxParagraph */ = {
+		E6243BCF1C911E5E0030C829 /* ofxTextSuite */ = {
 			isa = PBXGroup;
 			children = (
-				E6A3C7661C908D6100E6891A /* src */,
+				E6243BD01C911E5E0030C829 /* src */,
 			);
-			name = ofxParagraph;
+			name = ofxTextSuite;
 			sourceTree = "<group>";
 		};
-		E6A3C7661C908D6100E6891A /* src */ = {
+		E6243BD01C911E5E0030C829 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E6A3C7671C908D6100E6891A /* ofxParagraph.cpp */,
-				E6A3C7681C908D6100E6891A /* ofxParagraph.h */,
+				E6243BD11C911E5E0030C829 /* ofxTextBlock.cpp */,
+				E6243BD21C911E5E0030C829 /* ofxTextBlock.h */,
+				E6243BD31C911E5E0030C829 /* ofxTextSuite.h */,
 			);
 			name = src;
-			path = ../../../addons/ofxParagraph/src;
+			path = ../../../addons/ofxTextSuite/src;
 			sourceTree = "<group>";
 		};
 		E6A3C76A1C90939600E6891A /* ofxSmartFont */ = {
@@ -548,7 +550,6 @@
 				52C77060FBB9307AEFDAE8C6 /* ofxAnimatable.cpp in Sources */,
 				E6107C381C8E315B00B7DC7A /* OscOutboundPacketStream.cpp in Sources */,
 				E6107C331C8E315B00B7DC7A /* ofxOscReceiver.cpp in Sources */,
-				E6A3C7691C908D6100E6891A /* ofxParagraph.cpp in Sources */,
 				5D067CF087427621DD1E64B8 /* ofxAnimatableFloat.cpp in Sources */,
 				E6A3C76E1C90939600E6891A /* ofxSmartFont.cpp in Sources */,
 				E6107C361C8E315B00B7DC7A /* NetworkingUtils.cpp in Sources */,
@@ -570,6 +571,7 @@
 				E60DBDBF1C8E6F1E00D2B2D4 /* InfoScreen.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				E6107C351C8E315B00B7DC7A /* IpEndpointName.cpp in Sources */,
+				E6243BD41C911E5E0030C829 /* ofxTextBlock.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

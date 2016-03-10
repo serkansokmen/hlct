@@ -19,9 +19,7 @@ public:
     void keyPressed(int key);
     void windowResized(int w, int h);
     
-    hlct::Game          game;
-    
-    ofxPanel            gui;
-    
-    bool bDrawGui;
+    hlct::Game game;
+    ofxPanel   gui;
+    bool       bDrawGui;
 };

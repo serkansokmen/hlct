@@ -17,8 +17,8 @@ namespace hlct {
         
     public:
         void setup(const ofRectangle& stageRect, const ofPixels& helmetPixels, const int& sectionIndex);
-        void update(const ofRectangle& stageRect, const ofRectangle& heroRect, const float& scale);
-        void draw();
+        void update(const ofRectangle& stageRect, const ofRectangle& hitRect, const float& scale);
+        void draw(const bool& debug);
         
         inline const ofVec2f& getPosition() {
             return position;
@@ -28,6 +28,9 @@ namespace hlct {
         }
         inline float getHeight() {
             return img.getHeight();
+        }
+        inline void setScale(const float& scale){
+            this->scale = scale;
         }
         inline bool isAlive() {
             return alive;

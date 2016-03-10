@@ -13,15 +13,13 @@ void ofApp::setup(){
     
     ofxSmartFont::add(HLCT_INFO_SCREEN_FONT_PATH, HLCT_INFO_SCREEN_FONT_SIZE, HLCT_INFO_SCREEN_FONT_NAME);
     
-    ofParameterGroup params;
     ofRectangle gameRect;
     gameRect.setFromCenter(ofGetWindowRect().getCenter(),
                            ofGetWidth() - HLCT_CLAMP_STAGE,
-                           ofGetHeight() - HLCT_CLAMP_STAGE);
+                           ofGetHeight());
     game.setup(gameRect);
-    params.add(game.params);
-    gui.setup(params);
-    
+    gui.setup(game.params);
+    gui.setDefaultWidth(320);
     gui.loadFromFile("settings.xml");
     bDrawGui = false;
 }
@@ -71,14 +69,9 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-    ofRectangle gameRect;
-    gameRect.setFromCenter(ofGetWindowRect().getCenter(),
-                           w - HLCT_CLAMP_STAGE,
-                           h - HLCT_CLAMP_STAGE);
-    game.resize(gameRect);
 }
 
 //--------------------------------------------------------------
-void ofApp::exit(){
+void ofApp::exit(){;
     gui.saveToFile("settings.xml");
 }

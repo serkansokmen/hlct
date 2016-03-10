@@ -1,5 +1,6 @@
-ofxOsc
-ofxGui
 ofxAnimatable
+ofxGui
+ofxOsc
 ofxSmartFont
-ofxParagraph
+ofxTextSuite
+ofxXmlSettings

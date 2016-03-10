@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "Constants.h"
 #include "ofxSmartFont.h"
-#include "ofxParagraph.h"
+#include "ofxTextSuite.h"
 #include "ofxAnimatableFloat.h"
 
 
@@ -16,11 +16,10 @@ namespace hlct {
         ofRectangle         rectParagraph;
         
         ofRectangle         stageRect;
-        ofRectangle         drawRect;
         
         shared_ptr<ofxAnimatableFloat>  timer;
-        vector<ofxParagraph>            paragraphs;
-        int                             paragraphIndex;
+        vector<ofxTextBlock>            texts;
+        int                             msgIndex;
         
     public:
         
@@ -29,11 +28,7 @@ namespace hlct {
         void setup(const ofRectangle& stageRect,
                    const float& messageDuration,
                    const ofPixels& pixels, vector<string> messages);
-        void update();
+        void update(const ofRectangle& stageRect);
         void draw();
-        
-        const ofRectangle& getContainerRectangle(){
-            return drawRect;
-        }
     };
 }
