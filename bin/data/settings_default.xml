@@ -1,0 +1,25 @@
+<Game>
+	<Stage>
+		<Debug_Mode>0</Debug_Mode>
+		<Top_Left>100, 40</Top_Left>
+		<Width>1240</Width>
+		<Height>700</Height>
+	</Stage>
+	<Scaling_and_Alignment>
+		<Hero_Scale>0.5</Hero_Scale>
+		<Dropping_Scale>0.3</Dropping_Scale>
+		<Win_Scale>0.3</Win_Scale>
+		<Win_Offset>70</Win_Offset>
+		<Win_Diff>0.05</Win_Diff>
+		<Live_Scale>0.75</Live_Scale>
+	</Scaling_and_Alignment>
+	<Game_Settings>
+		<New>0</New>
+		<Duration>50</Duration>
+		<Curent_Time>0</Curent_Time>
+		<Paused>0</Paused>
+	</Game_Settings>
+	<Score>0</Score>
+	<User_Exists>0</User_Exists>
+	<User_Posing>0</User_Posing>
+</Game>
