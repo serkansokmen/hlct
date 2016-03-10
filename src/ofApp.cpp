@@ -16,7 +16,7 @@ void ofApp::setup(){
     ofRectangle gameRect;
     gameRect.setFromCenter(ofGetWindowRect().getCenter(),
                            ofGetWidth() - HLCT_CLAMP_STAGE,
-                           ofGetHeight());
+                           ofGetHeight() - 80);
     game.setup(gameRect);
     gui.setup(game.params);
     gui.setDefaultWidth(320);
