@@ -19,7 +19,7 @@ namespace hlct {
         void update(const ofRectangle& stageRect, const float& scale);
         void draw();
         
-        inline const ofVec2f& moveTo(const ofVec2f& position) {
+        inline void moveTo(const ofVec2f& position) {
             this->position.set(ofClamp(position.x, HLCT_CLAMP_STAGE, stageRect.getWidth() - HLCT_CLAMP_STAGE),
                                position.y);
         }
