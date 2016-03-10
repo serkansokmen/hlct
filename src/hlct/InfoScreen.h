@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include "ofxSmartFont.h"
 #include "ofxParagraph.h"
+#include "ofxTextSuite.h"
 #include "ofxAnimatableFloat.h"
 
 
@@ -20,7 +21,8 @@ namespace hlct {
         
         shared_ptr<ofxAnimatableFloat>  timer;
         vector<ofxParagraph>            paragraphs;
-        int                             paragraphIndex;
+        vector<ofxTextBlock>            texts;
+        int                             msgIndex;
         
     public:
         

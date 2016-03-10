@@ -37,6 +37,7 @@
 		E6107C391C8E315B00B7DC7A /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2A1C8E315B00B7DC7A /* OscPrintReceivedElements.cpp */; };
 		E6107C3A1C8E315B00B7DC7A /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2C1C8E315B00B7DC7A /* OscReceivedElements.cpp */; };
 		E6107C3B1C8E315B00B7DC7A /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6107C2E1C8E315B00B7DC7A /* OscTypes.cpp */; };
+		E6243BD41C911E5E0030C829 /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6243BD11C911E5E0030C829 /* ofxTextBlock.cpp */; };
 		E6A3C7691C908D6100E6891A /* ofxParagraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C7671C908D6100E6891A /* ofxParagraph.cpp */; };
 		E6A3C76E1C90939600E6891A /* ofxSmartFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C76C1C90939600E6891A /* ofxSmartFont.cpp */; };
 		E6A3C7721C90B4E900E6891A /* Hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6A3C7701C90B4E900E6891A /* Hero.cpp */; };
@@ -146,6 +147,9 @@
 		E6107C2D1C8E315B00B7DC7A /* OscReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
 		E6107C2E1C8E315B00B7DC7A /* OscTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
 		E6107C2F1C8E315B00B7DC7A /* OscTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		E6243BD11C911E5E0030C829 /* ofxTextBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextBlock.cpp; sourceTree = "<group>"; };
+		E6243BD21C911E5E0030C829 /* ofxTextBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxTextBlock.h; sourceTree = "<group>"; };
+		E6243BD31C911E5E0030C829 /* ofxTextSuite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxTextSuite.h; sourceTree = "<group>"; };
 		E6A3C7621C9070D900E6891A /* ImagePack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImagePack.h; path = hlct/ImagePack.h; sourceTree = "<group>"; };
 		E6A3C7671C908D6100E6891A /* ofxParagraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxParagraph.cpp; sourceTree = "<group>"; };
 		E6A3C7681C908D6100E6891A /* ofxParagraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxParagraph.h; sourceTree = "<group>"; };
@@ -259,6 +263,7 @@
 				8D83D7AC476703EBECC1932D /* ofxAnimatable */,
 				E6A3C7651C908D6100E6891A /* ofxParagraph */,
 				E6A3C76A1C90939600E6891A /* ofxSmartFont */,
+				E6243BCF1C911E5E0030C829 /* ofxTextSuite */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -399,6 +404,25 @@
 				E6107C2F1C8E315B00B7DC7A /* OscTypes.h */,
 			);
 			path = osc;
+			sourceTree = "<group>";
+		};
+		E6243BCF1C911E5E0030C829 /* ofxTextSuite */ = {
+			isa = PBXGroup;
+			children = (
+				E6243BD01C911E5E0030C829 /* src */,
+			);
+			name = ofxTextSuite;
+			sourceTree = "<group>";
+		};
+		E6243BD01C911E5E0030C829 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E6243BD11C911E5E0030C829 /* ofxTextBlock.cpp */,
+				E6243BD21C911E5E0030C829 /* ofxTextBlock.h */,
+				E6243BD31C911E5E0030C829 /* ofxTextSuite.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxTextSuite/src;
 			sourceTree = "<group>";
 		};
 		E6A3C7651C908D6100E6891A /* ofxParagraph */ = {
@@ -570,6 +594,7 @@
 				E60DBDBF1C8E6F1E00D2B2D4 /* InfoScreen.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				E6107C351C8E315B00B7DC7A /* IpEndpointName.cpp in Sources */,
+				E6243BD41C911E5E0030C829 /* ofxTextBlock.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,7 +7,7 @@ hlct::InfoScreen::InfoScreen(){
     timer->setRepeatType(LOOP_BACK_AND_FORTH);
     timer->setCurve(LINEAR);
     
-    paragraphIndex = -1;
+    this->msgIndex = -1;
 }
 
 
@@ -16,12 +16,17 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
                              const ofPixels& pixels, vector<string> messages){
     
     this->stageRect.set(stageRect);
-    image.setFromPixels(pixels);
+    this->image.setFromPixels(pixels);
     
     for (auto msg : messages){
         ofxParagraph p = ofxParagraph(msg, stageRect.getWidth()/2);
+        ofxTextBlock t;
         p.setWidth(stageRect.getWidth()/2);
         shared_ptr<ofxSmartFont> font = ofxSmartFont::get(HLCT_INFO_SCREEN_FONT_NAME);
+        t.init(HLCT_INFO_SCREEN_FONT_PATH, HLCT_INFO_SCREEN_FONT_SIZE);
+        t.setText(msg);
+        t.setColor(255, 255, 255, 255);
+        t.wrapTextX(stageRect.getWidth()/2);
         if (font){
             p.setFont(font);
         }
@@ -30,6 +35,7 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
         p.setSpacing(40);
         p.setBorderPadding(40);
         this->paragraphs.push_back(p);
+        this->texts.push_back(t);
     }
     
     timer->setDuration(messageDuration);
@@ -45,9 +51,9 @@ void hlct::InfoScreen::update(){
     if (idx == paragraphs.size() && idx != 0) {
         idx--;
     }
-    this->paragraphIndex = idx;
+    this->msgIndex = idx;
     
-    auto p = paragraphs[paragraphIndex];
+    auto p = paragraphs[msgIndex];
     
     float imgW = image.getWidth();
     float imgH = image.getHeight();
@@ -65,9 +71,12 @@ void hlct::InfoScreen::update(){
 
 
 void hlct::InfoScreen::draw(){
-    if (this->paragraphIndex != -1){
-        auto p = paragraphs[paragraphIndex];
+    if (this->msgIndex != -1){
+        auto p = paragraphs[msgIndex];
         image.draw(rectImage);
         p.draw(rectParagraph.getLeft(), rectParagraph.getTop());
+        
+        auto t = texts[msgIndex];
+        t.drawCenter(rectParagraph.getCenter().x, rectImage.getBottom());
     }
 }
