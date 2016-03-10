@@ -154,6 +154,7 @@
 		E6A3C76D1C90939600E6891A /* ofxSmartFont.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSmartFont.h; sourceTree = "<group>"; };
 		E6A3C7701C90B4E900E6891A /* Hero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Hero.cpp; path = hlct/Hero.cpp; sourceTree = "<group>"; };
 		E6A3C7711C90B4E900E6891A /* Hero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Hero.h; path = hlct/Hero.h; sourceTree = "<group>"; };
+		E6FBBBA81C92184A00199EAA /* StageBackground.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = StageBackground.h; path = hlct/StageBackground.h; sourceTree = "<group>"; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
 		F7CFEE77982205D3F1496C03 /* ofxAnimatable.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAnimatable.cpp; path = ../../../addons/ofxAnimatable/src/ofxAnimatable.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -233,6 +234,7 @@
 				E60DBDC21C8E701E00D2B2D4 /* LivesDisplay.cpp */,
 				0B04454D74AA654571895F7E /* GameState.h */,
 				E6A3C7621C9070D900E6891A /* ImagePack.h */,
+				E6FBBBA81C92184A00199EAA /* StageBackground.h */,
 			);
 			name = hlct;
 			sourceTree = "<group>";
