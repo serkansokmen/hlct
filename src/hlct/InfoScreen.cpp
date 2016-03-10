@@ -49,7 +49,7 @@ void hlct::InfoScreen::update(const ofRectangle& stageRect){
     float rw = stageRect.getWidth();
     float rh = stageRect.getHeight();
     float tx = (rw - t.getWidth())/2;
-    float ty = rectImage.getTop() + rectImage.getHeight() + 140;
+    float ty = rectImage.getTop() + rectImage.getHeight();
     
     this->rectImage.set(stageRect.getX() + (rw-imgW)/2,
                         stageRect.getY() + (rh-imgH)/2 - 100,

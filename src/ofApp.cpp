@@ -18,11 +18,8 @@ void ofApp::setup(){
                            ofGetWidth() - HLCT_CLAMP_STAGE,
                            ofGetHeight());
     game.setup(gameRect);
-//    if (settings.load("settings.xml")){
-//        settings.deserialize(game.params);
-//    }
     gui.setup(game.params);
-    
+    gui.setDefaultWidth(320);
     gui.loadFromFile("settings.xml");
     bDrawGui = false;
 }
@@ -75,8 +72,6 @@ void ofApp::windowResized(int w, int h){
 }
 
 //--------------------------------------------------------------
-void ofApp::exit(){
-//    settings.serialize(game.params);
-//    settings.save("settings.xml");
+void ofApp::exit(){;
     gui.saveToFile("settings.xml");
 }

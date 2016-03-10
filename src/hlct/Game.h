@@ -74,9 +74,11 @@ namespace hlct {
             }
         };
         
+        void updateHelmets(const ofRectangle& stageRect);
+        
         inline void resizeLoadingBar(const ofRectangle& stageRect){
             loadingBarRect.setFromCenter(stageRect.getCenter(), 400, 25);
-            loadingBarRect.setY(stageRect.getBottom() + 120);
+            loadingBarRect.setY(stageRect.getBottom() - HLCT_LOADING_BAR_OFFSET_BOTTOM);
         };
         
         void setupInfoScreens(const ofRectangle& rect);
@@ -149,7 +151,6 @@ namespace hlct {
         ofParameter<bool>   bStart;
         ofParameter<bool>   bAddHelmet;
         ofParameter<bool>   bPaused;
-        ofParameter<bool>   bDebugScaling;
-        ofParameter<bool>   bDebugStage;
+        ofParameter<bool>   bDebug;
     };
 }

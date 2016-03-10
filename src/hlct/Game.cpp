@@ -55,20 +55,19 @@ void hlct::Game::setup(const ofRectangle& rect){
     
     ofParameterGroup stageParams;
     stageParams.setName("Stage");
-    stageParams.add(bDebugStage.set("Stage Debug Mode", false));
-    stageParams.add(stagePos.set("Top Left", ofVec2f(HLCT_CLAMP_STAGE, 0), ofVec2f::zero(), ofGetWindowRect().getBottomRight()));
-    stageParams.add(stageWidth.set("Width", ofGetWidth() - HLCT_CLAMP_STAGE*2, ofGetWidth()/2, ofGetWidth()*2));
-    stageParams.add(stageHeight.set("Height", ofGetHeight(), ofGetHeight()/2, ofGetHeight()*2));
+    stageParams.add(bDebug.set("Debug Mode", false));
+    stageParams.add(stagePos.set("Top Left", ofVec2f(HLCT_CLAMP_STAGE, 40), ofVec2f::zero(), ofGetWindowRect().getBottomRight()));
+    stageParams.add(stageWidth.set("Width", ofGetWidth() - HLCT_CLAMP_STAGE * 2, ofGetWidth()/2, ofGetWidth()*2));
+    stageParams.add(stageHeight.set("Height", ofGetHeight() - 200, ofGetHeight()/2, ofGetHeight()*2));
     
     ofParameterGroup alignParams;
     alignParams.setName("Scaling and Alignment");
-    alignParams.add(bDebugScaling.set("Debug Mode", false));
-    alignParams.add(scaleHero.set("Hero Scale", 1.f, HLCT_HERO_SCALE_MIN, HLCT_HERO_SCALE_MAX));
-    alignParams.add(scaleBait.set("Dropping Helmet Scale", .7f, HLCT_BAIT_SCALE_MIN, HLCT_BAIT_SCALE_MAX));
-    alignParams.add(scaleBaitWin.set("Win Helmet Scale", .65f, HLCT_BAIT_SCALE_MIN, HLCT_BAIT_SCALE_MAX));
-    alignParams.add(offsetBaitWin.set("Win Helmet Offset", 120, HLCT_BAIT_WIN_OFFSET_MIN, HLCT_BAIT_WIN_OFFSET_MAX));
-    alignParams.add(diffBaitWin.set("Win Helmet Diff", .1f, HLCT_BAIT_WIN_DIFF_MIN, HLCT_BAIT_WIN_DIFF_MAX));
-    alignParams.add(scaleLive.set("Live Icon Scale", 1.f, HLCT_LIVE_SCALE_MIN, HLCT_LIVE_SCALE_MAX));
+    alignParams.add(scaleHero.set("Hero Scale", .5f, HLCT_HERO_SCALE_MIN, HLCT_HERO_SCALE_MAX));
+    alignParams.add(scaleBait.set("Dropping Scale", .3f, HLCT_BAIT_SCALE_MIN, HLCT_BAIT_SCALE_MAX));
+    alignParams.add(scaleBaitWin.set("Win Scale", .3f, HLCT_BAIT_SCALE_MIN, HLCT_BAIT_SCALE_MAX));
+    alignParams.add(offsetBaitWin.set("Win Offset", 70, HLCT_BAIT_WIN_OFFSET_MIN, HLCT_BAIT_WIN_OFFSET_MAX));
+    alignParams.add(diffBaitWin.set("Win Diff", .05f, HLCT_BAIT_WIN_DIFF_MIN, HLCT_BAIT_WIN_DIFF_MAX));
+    alignParams.add(scaleLive.set("Live Scale", .75f, HLCT_LIVE_SCALE_MIN, HLCT_LIVE_SCALE_MAX));
     
     ofParameterGroup gameParams;
     gameParams.setName("Game Settings");
@@ -206,46 +205,23 @@ void hlct::Game::update(){
             
             if (!bPaused){
                 gameTimer.update(HLCT_ANIM_UPDATE_CYCLE);
-                hero.update(stageRect, scaleHero);
-                currentTime.set(gameTimer.getCurrentValue());
-                currentTimeStr = ofToString(currentTime);
-                
-                bool gameEnded = gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0;
-                bool isDebugging = bDebugStage || bDebugScaling;
-                if (!isDebugging){
-                    if (gameEnded) {
-                        endGame();
-                    }
+            }
+            currentTime.set(gameTimer.getCurrentValue());
+            currentTimeStr = ofToString(currentTime);
+            
+            bool gameEnded = gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0;
+            if (!bDebug){
+                if (gameEnded) {
+                    endGame();
                 }
-                if (!gameEnded) {
-                    if (helmets.size() == 0) {
-                        addRandomHelmet();
-                    }
-                    ofRectangle heroRect;
-                    heroRect.set(hero.getHitRectangle());
-                    ofRectangle wRect(heroRect);
-                    for (auto h : helmets){
-                        h->update(stageRect, heroRect, scaleBait);
-                    }
-                    
-                    int wi = 0;
-                    for (auto wh : winHelmets){
-                        wRect.setY(heroRect.getTop() - wh->getHeight() * diffBaitWin * wi + offsetBaitWin);
-                        wh->update(stageRect, wRect, scaleBaitWin);
-                        wi++;
-                    }
-                    for (int i=0; i<helmets.size(); ++i){
-                        shared_ptr<Helmet> h = helmets[i];
-                        if (!h->isAlive()) {
-                            helmets.erase(helmets.begin() + i);
-                            livesLeft--;
-                        } else {
-                            if (h->isWin(heroRect)) {
-                                winHelmets.push_back(h);
-                                helmets.erase(helmets.begin() + i);
-                            }
-                        }
-                    }
+            }
+            if (!gameEnded || bDebug) {
+                hero.update(stageRect, scaleHero);
+                if (helmets.size() == 0) {
+                    addRandomHelmet();
+                }
+                updateHelmets(stageRect);
+                if (!bDebug) {
                     score = winHelmets.size();
                 }
             }
@@ -274,6 +250,35 @@ void hlct::Game::update(){
 }
 
 
+void hlct::Game::updateHelmets(const ofRectangle& stageRect){
+    ofRectangle heroRect;
+    heroRect.set(hero.getHitRectangle());
+    ofRectangle wRect(heroRect);
+    for (auto h : helmets){
+        h->update(stageRect, heroRect, scaleBait);
+    }
+    
+    int wi = 0;
+    for (auto wh : winHelmets){
+        wRect.setY(heroRect.getTop() - wh->getHeight() * diffBaitWin * wi + offsetBaitWin);
+        wh->update(stageRect, wRect, scaleBaitWin);
+        wi++;
+    }
+    for (int i=0; i<helmets.size(); ++i){
+        shared_ptr<Helmet> h = helmets[i];
+        if (!h->isAlive()) {
+            helmets.erase(helmets.begin() + i);
+            livesLeft--;
+        } else {
+            if (h->isWin(heroRect)) {
+                winHelmets.push_back(h);
+                helmets.erase(helmets.begin() + i);
+            }
+        }
+    }
+}
+
+
 void hlct::Game::draw(){
     ofRectangle stageRect(stagePos.get(), stageWidth.get(), stageHeight.get());
     imgPack.background->draw(stageRect);
@@ -295,12 +300,12 @@ void hlct::Game::draw(){
         }
         case GAME_STATE_GAME: {
             ofSetColor(ofColor::white);
-            hero.draw(bDebugScaling);
+            hero.draw(bDebug);
             for (auto h : winHelmets){
-                h->draw(bDebugScaling);
+                h->draw(bDebug);
             }
             for (auto h : helmets){
-                h->draw(bDebugScaling);
+                h->draw(bDebug);
             }
             livesDisplay.draw(stageRect, livesLeft, scaleLive);
             break;
@@ -317,12 +322,12 @@ void hlct::Game::draw(){
     
     // Draw end timer bar
     if (state == GAME_STATE_END_LOOSE || state == GAME_STATE_END_WIN){
-        ofSetColor(ofColor::white, 50);
+        ofSetColor(ofColor::white, 100);
         drawLoadingBar(loadingBarRect, gameEndTimer.getCurrentValue());
         ofSetColor(ofColor::white);
     }
     
-    if (bDebugStage) {
+    if (bDebug) {
         ofPushStyle();
         ofSetColor(ofColor::greenYellow);
         ofNoFill();
