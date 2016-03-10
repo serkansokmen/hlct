@@ -18,6 +18,9 @@ hlct::Game::Game(){
 hlct::Game::~Game(){
     helmets.clear();
     
+    scaleHero.removeListener(this, &Game::handleScaleHero);
+    scaleBait.removeListener(this, &Game::handleScaleBait);
+    scaleBaitWin.removeListener(this, &Game::handleScaleBaitWin);
     bUserExists.removeListener(this, &Game::handleUserExists);
     bUserPosing.removeListener(this, &Game::handlePosing);
     bStart.removeListener(this, &Game::handleGameStart);
@@ -27,15 +30,14 @@ hlct::Game::~Game(){
 
 void hlct::Game::setup(const ofRectangle& rect){
     
-    stageRect.set(rect);
-    setupInfoScreens();
+    this->resize(rect);
+    setupInfoScreens(rect);
     
     helmets.clear();
     
     state = GAME_STATE_TITLE;
     
-    hero.setup(ofVec2f(stageRect.getWidth()/2, stageRect.getBottom() - HLCT_HERO_BOTTOM),
-               imgPack.hero->getPixels());
+    ofRectangle stageRect(rect.getTopLeft(), rect.getWidth(), rect.getHeight());
     
     gameStartTimer.setDuration(HLCT_USER_POSE_DURATION);
     gameStartTimer.setCurve(LINEAR);
@@ -50,16 +52,34 @@ void hlct::Game::setup(const ofRectangle& rect){
     livesDisplay.setup(imgPack, HLCT_LIVES);
     
     params.setName("Game");
-    params.add(bStart.set("New Game", false));
-    params.add(endTime.set("Game Duration", HLCT_MIN_DURATION, HLCT_MIN_DURATION, HLCT_MAX_DURATION));
-    params.add(scaleHero.set("Hero Scale", HLCT_MAX_HERO_SCALE/2, HLCT_MIN_HERO_SCALE, HLCT_MAX_HERO_SCALE));
-    params.add(scaleBait.set("Dropping Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
-    params.add(scaleBaitWin.set("Win Helmet Scale", HLCT_MAX_BAIT_SCALE/2, HLCT_MIN_BAIT_SCALE, HLCT_MAX_BAIT_SCALE));
-    params.add(offsetBaitWin.set("Win Helmet Offset", 0, -200, 200));
-    params.add(scaleLive.set("Live Icon Scale", HLCT_MAX_LIVE_SCALE/2, HLCT_MIN_LIVE_SCALE, HLCT_MAX_LIVE_SCALE));
-    params.add(currentTimeStr.set("Curent Time", "0"));
-    params.add(bPaused.set("Paused", false));
     
+    ofParameterGroup stageParams;
+    stageParams.setName("Stage");
+    stageParams.add(bDebugStage.set("Stage Debug Mode", false));
+    stageParams.add(stagePos.set("Top Left", ofVec2f(HLCT_CLAMP_STAGE, 0), ofVec2f::zero(), ofGetWindowRect().getBottomRight()));
+    stageParams.add(stageWidth.set("Width", ofGetWidth() - HLCT_CLAMP_STAGE*2, ofGetWidth()/2, ofGetWidth()*2));
+    stageParams.add(stageHeight.set("Height", ofGetHeight(), ofGetHeight()/2, ofGetHeight()*2));
+    
+    ofParameterGroup alignParams;
+    alignParams.setName("Scaling and Alignment");
+    alignParams.add(bDebugScaling.set("Debug Mode", false));
+    alignParams.add(scaleHero.set("Hero Scale", 1.f, HLCT_HERO_SCALE_MIN, HLCT_HERO_SCALE_MAX));
+    alignParams.add(scaleBait.set("Dropping Helmet Scale", .7f, HLCT_BAIT_SCALE_MIN, HLCT_BAIT_SCALE_MAX));
+    alignParams.add(scaleBaitWin.set("Win Helmet Scale", .65f, HLCT_BAIT_SCALE_MIN, HLCT_BAIT_SCALE_MAX));
+    alignParams.add(offsetBaitWin.set("Win Helmet Offset", 120, HLCT_BAIT_WIN_OFFSET_MIN, HLCT_BAIT_WIN_OFFSET_MAX));
+    alignParams.add(diffBaitWin.set("Win Helmet Diff", .1f, HLCT_BAIT_WIN_DIFF_MIN, HLCT_BAIT_WIN_DIFF_MAX));
+    alignParams.add(scaleLive.set("Live Icon Scale", 1.f, HLCT_LIVE_SCALE_MIN, HLCT_LIVE_SCALE_MAX));
+    
+    ofParameterGroup gameParams;
+    gameParams.setName("Game Settings");
+    gameParams.add(bStart.set("New", false));
+    gameParams.add(endTime.set("Duration", 50, HLCT_MIN_DURATION, HLCT_MAX_DURATION));
+    gameParams.add(currentTimeStr.set("Curent Time", "0"));
+    gameParams.add(bPaused.set("Paused", false));
+    
+    params.add(stageParams);
+    params.add(alignParams);
+    params.add(gameParams);
     params.add(score.set("Score", 0, 0, HLCT_MAX_CATCH));
     
     params.add(bUserExists.set("User Exists", false));
@@ -68,6 +88,9 @@ void hlct::Game::setup(const ofRectangle& rect){
     bAddHelmet.set("Add Helmet", false);
     helmetSection.set("Helmet Section", 0, 0, HLCT_HELMET_SECTION_COUNT);
     
+    scaleHero.addListener(this, &Game::handleScaleHero);
+    scaleBait.addListener(this, &Game::handleScaleBait);
+    scaleBaitWin.addListener(this, &Game::handleScaleBaitWin);
     bUserExists.addListener(this, &Game::handleUserExists);
     bUserPosing.addListener(this, &Game::handlePosing);
     bStart.addListener(this, &Game::handleGameStart);
@@ -77,7 +100,7 @@ void hlct::Game::setup(const ofRectangle& rect){
 }
 
 
-void hlct::Game::setupInfoScreens(){
+void hlct::Game::setupInfoScreens(const ofRectangle& rect){
     // Setup info screens and messages
     InfoScreen screenTitle;
     InfoScreen screenPosing;
@@ -90,7 +113,7 @@ void hlct::Game::setupInfoScreens(){
     messages.push_back(msg);
     msg = "COLLECT ALL HARD HATS!";
     messages.push_back(msg);
-    screenTitle.setup(stageRect,
+    screenTitle.setup(rect,
                       HLCT_INFO_SCREEN_DURATION,
                       imgPack.brand->getPixels(),
                       messages);
@@ -99,7 +122,7 @@ void hlct::Game::setupInfoScreens(){
     messages.clear();
     msg = "PLEASE WAIT IN RANGE...";
     messages.push_back(msg);
-    screenPosing.setup(stageRect,
+    screenPosing.setup(rect,
                        HLCT_INFO_SCREEN_DURATION,
                        imgPack.brand->getPixels(),
                        messages);
@@ -110,7 +133,7 @@ void hlct::Game::setupInfoScreens(){
     messages.push_back(msg);
     msg = "YOU ARE IN SAFE NOW!";
     messages.push_back(msg);
-    screenWin.setup(stageRect,
+    screenWin.setup(rect,
                     HLCT_INFO_SCREEN_DURATION,
                     imgPack.brand->getPixels(),
                     messages);
@@ -121,7 +144,7 @@ void hlct::Game::setupInfoScreens(){
     messages.push_back(msg);
     msg = "BE CAREFUL!";
     messages.push_back(msg);
-    screenLoose.setup(stageRect,
+    screenLoose.setup(rect,
                       HLCT_INFO_SCREEN_DURATION,
                       imgPack.brand->getPixels(),
                       messages);
@@ -134,6 +157,8 @@ void hlct::Game::setupInfoScreens(){
 
 
 void hlct::Game::update(){
+    
+    ofRectangle stageRect(stagePos.get(), stageWidth.get(), stageHeight.get());
     
     if (useOsc){
         while (receiver.hasWaitingMessages()){
@@ -152,8 +177,8 @@ void hlct::Game::update(){
                 bUserPosing = m.getArgAsBool(0);
             }
             if (m.getAddress() == HLCT_OSC_ENDPOINT_POSITION){
-                float x = ofClamp(ofMap(m.getArgAsFloat(0), 0, 1, 0, stageRect.getWidth()), HLCT_CLAMP_STAGE, ofGetWidth()-HLCT_CLAMP_STAGE);
-                hero.moveTo(ofVec2f(x, hero.getPosition().y));
+                float x = ofMap(m.getArgAsFloat(0), 0, 1, stageRect.getX(), stageRect.getX() + stageRect.getWidth());
+                hero.moveTo(x);
             }
             if (m.getAddress() == HLCT_OSC_ENDPOINT_NEW){
                 bStart = m.getArgAsBool(0);
@@ -166,14 +191,14 @@ void hlct::Game::update(){
     
     switch (state){
         case GAME_STATE_TITLE: {
-            screens["title"].update();
+            screens["title"].update(stageRect);
             break;
         }
             
         case GAME_STATE_POSING: {
-            screens["posing"].update();
+            screens["posing"].update(stageRect);
             gameStartTimer.update(HLCT_ANIM_UPDATE_CYCLE);
-            resizeLoadingBar("posing");
+            resizeLoadingBar(stageRect);
             break;
         }
             
@@ -185,9 +210,14 @@ void hlct::Game::update(){
                 currentTime.set(gameTimer.getCurrentValue());
                 currentTimeStr = ofToString(currentTime);
                 
-                if (gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0){
-                    endGame();
-                } else {
+                bool gameEnded = gameTimer.getCurrentValue() >= endTime || score == HLCT_MAX_CATCH || livesLeft == 0;
+                bool isDebugging = bDebugStage || bDebugScaling;
+                if (!isDebugging){
+                    if (gameEnded) {
+                        endGame();
+                    }
+                }
+                if (!gameEnded) {
                     if (helmets.size() == 0) {
                         addRandomHelmet();
                     }
@@ -199,9 +229,9 @@ void hlct::Game::update(){
                     }
                     
                     int wi = 0;
-                    for (auto h : winHelmets){
-                        wRect.setY(heroRect.getTop() - h->getHeight() * 0.15 * wi + offsetBaitWin);
-                        h->update(stageRect, wRect, scaleBaitWin);
+                    for (auto wh : winHelmets){
+                        wRect.setY(heroRect.getTop() - wh->getHeight() * diffBaitWin * wi + offsetBaitWin);
+                        wh->update(stageRect, wRect, scaleBaitWin);
                         wi++;
                     }
                     for (int i=0; i<helmets.size(); ++i){
@@ -224,12 +254,11 @@ void hlct::Game::update(){
         }
         case GAME_STATE_END_LOOSE:
         case GAME_STATE_END_WIN: {
+            resizeLoadingBar(stageRect);
             if (state == GAME_STATE_END_LOOSE){
-                screens["loose"].update();
-                resizeLoadingBar("loose");
+                screens["loose"].update(stageRect);
             } else if (state == GAME_STATE_END_WIN){
-                screens["win"].update();
-                resizeLoadingBar("win");
+                screens["win"].update(stageRect);
             }
             gameEndTimer.update(HLCT_ANIM_UPDATE_CYCLE);
             if (!gameEndTimer.isAnimating()){
@@ -246,7 +275,7 @@ void hlct::Game::update(){
 
 
 void hlct::Game::draw(){
-    
+    ofRectangle stageRect(stagePos.get(), stageWidth.get(), stageHeight.get());
     imgPack.background->draw(stageRect);
     
     switch (state){
@@ -266,12 +295,12 @@ void hlct::Game::draw(){
         }
         case GAME_STATE_GAME: {
             ofSetColor(ofColor::white);
-            hero.draw();
+            hero.draw(bDebugScaling);
             for (auto h : winHelmets){
-                h->draw();
+                h->draw(bDebugScaling);
             }
             for (auto h : helmets){
-                h->draw();
+                h->draw(bDebugScaling);
             }
             livesDisplay.draw(stageRect, livesLeft, scaleLive);
             break;
@@ -292,7 +321,25 @@ void hlct::Game::draw(){
         drawLoadingBar(loadingBarRect, gameEndTimer.getCurrentValue());
         ofSetColor(ofColor::white);
     }
+    
+    if (bDebugStage) {
+        ofPushStyle();
+        ofSetColor(ofColor::greenYellow);
+        ofNoFill();
+        ofDrawRectangle(stageRect);
+        ofPopStyle();
+    }
 }
+
+void hlct::Game::drawLoadingBar(const ofRectangle& rect, const float& width){
+    ofNoFill();
+    ofDrawRectangle(rect);
+    ofFill();
+    ofDrawRectangle(rect.getTopLeft(),
+                    rect.getWidth()*width,
+                    rect.getHeight());
+}
+
 
 
 void hlct::Game::startGame(){
@@ -309,6 +356,9 @@ void hlct::Game::startGame(){
     score = 0;
     livesLeft = HLCT_LIVES;
     bPaused = false;
+    
+    ofRectangle stageRect(stagePos.get(), stageWidth.get(), stageHeight.get());
+    hero.setup(ofVec2f(stageRect.getWidth()/2, stageRect.getBottom()), imgPack.hero->getPixels());
 }
 
 
@@ -332,15 +382,7 @@ void hlct::Game::endGame(){
 void hlct::Game::addRandomHelmet(){
     shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
     helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
-    helmet->setup(stageRect, imgPack.bait->getPixels(), helmetSection);
+    helmet->setup(ofRectangle(stagePos.get(), stageWidth.get(), stageHeight.get()),
+                  imgPack.bait->getPixels(), helmetSection);
     helmets.push_back(helmet);
-}
-
-void hlct::Game::drawLoadingBar(const ofRectangle& rect, const float& width){
-    ofNoFill();
-    ofDrawRectangle(rect);
-    ofFill();
-    ofDrawRectangle(rect.getTopLeft(),
-                    rect.getWidth()*width,
-                    rect.getHeight());
 }

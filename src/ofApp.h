@@ -21,6 +21,7 @@ public:
     
     hlct::Game          game;
     
+    ofXml               settings;
     ofxPanel            gui;
     
     bool bDrawGui;

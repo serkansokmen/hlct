@@ -60,13 +60,26 @@ namespace hlct {
             bAddHelmet = false;
         };
         
-        inline void resizeLoadingBar(const string& infoScreenName){
-            loadingBarRect.setFromCenter(screens[infoScreenName].getContainerRectangle().getCenter(),
-                                         400, 25);
-            loadingBarRect.setY(screens[infoScreenName].getContainerRectangle().getBottom() + 120);
+        inline void handleScaleHero(float& val){
+            hero.setScale(val);
+        };
+        inline void handleScaleBait(float& val){
+            for (auto h : helmets){
+                h->setScale(val);
+            }
+        };
+        inline void handleScaleBaitWin(float& val){
+            for (auto wh : winHelmets){
+                wh->setScale(val);
+            }
         };
         
-        void setupInfoScreens();
+        inline void resizeLoadingBar(const ofRectangle& stageRect){
+            loadingBarRect.setFromCenter(stageRect.getCenter(), 400, 25);
+            loadingBarRect.setY(stageRect.getBottom() + 120);
+        };
+        
+        void setupInfoScreens(const ofRectangle& rect);
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         
         std::map<string, InfoScreen> screens;
@@ -77,7 +90,7 @@ namespace hlct {
         hlct::ImagePack             imgPack;
         
         ofxAnimatableFloat          gameStartTimer, gameTimer, gameEndTimer;
-        ofRectangle                 stageRect, loadingBarRect;
+        ofRectangle                 loadingBarRect;
         
         ofxOscReceiver              receiver;
         
@@ -102,12 +115,13 @@ namespace hlct {
         
         inline void mouseMoved(int x, int y){
             if (!useOsc) {
-//                hero.moveTo(ofVec2f(x, hero.getPosition().y));
-                hero.moveTo(ofVec2f(x, y));
+                hero.moveTo(x);
             }
         };
         inline void resize(const ofRectangle& stageRect){
-            this->stageRect.set(stageRect);
+            this->stagePos.set(stageRect.getTopLeft());
+            this->stageWidth.set(stageRect.getWidth());
+            this->stageHeight.set(stageRect.getHeight());
         };
         inline bool isRunning(){
             return state == GAME_STATE_GAME;
@@ -115,10 +129,15 @@ namespace hlct {
         
         ofParameterGroup    params;
         ofParameter<string> currentTimeStr;
+        ofParameter<ofVec2f>    stagePos;
+        ofParameter<float>      stageWidth;
+        ofParameter<float>      stageHeight;
+        
         ofParameter<float>  scaleHero;
         ofParameter<float>  scaleBait;
         ofParameter<float>  scaleBaitWin;
         ofParameter<float>  offsetBaitWin;
+        ofParameter<float>  diffBaitWin;
         ofParameter<float>  scaleLive;
         ofParameter<float>  currentTime;
         ofParameter<int>    endTime;
@@ -130,5 +149,7 @@ namespace hlct {
         ofParameter<bool>   bStart;
         ofParameter<bool>   bAddHelmet;
         ofParameter<bool>   bPaused;
+        ofParameter<bool>   bDebugScaling;
+        ofParameter<bool>   bDebugStage;
     };
 }

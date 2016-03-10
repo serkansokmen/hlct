@@ -23,7 +23,6 @@ void hlct::Helmet::update(const ofRectangle& stageRect, const ofRectangle& heroR
     
     float imgW = img.getWidth() * scale;
     float imgH = img.getHeight() * scale;
-    intersectRect.set(position, imgW, imgH);
     
     if (alive && position.y <= stageRect.getBottom() - imgH/2) {
         if (!win) {
@@ -35,15 +34,17 @@ void hlct::Helmet::update(const ofRectangle& stageRect, const ofRectangle& heroR
     } else {
         alive = false;
     }
+    
+    intersectRect.set(position, imgW, imgH);
 }
 
-void hlct::Helmet::draw(){
-    ofPushStyle();
-//    ofNoFill();
-//    ofSetColor(ofColor::blue);
-//    ofDrawRectangle(intersectRect);
-    ofSetColor(ofColor::white);
-    ofFill();
+void hlct::Helmet::draw(const bool& debug){
     img.draw(intersectRect);
-    ofPopStyle();
+    if (debug){
+        ofPushStyle();
+        ofNoFill();
+        ofSetColor(ofColor::blue);
+        ofDrawRectangle(intersectRect);
+        ofPopStyle();
+    }
 }

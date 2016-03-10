@@ -16,7 +16,6 @@ namespace hlct {
         ofRectangle         rectParagraph;
         
         ofRectangle         stageRect;
-        ofRectangle         drawRect;
         
         shared_ptr<ofxAnimatableFloat>  timer;
         vector<ofxTextBlock>            texts;
@@ -29,11 +28,7 @@ namespace hlct {
         void setup(const ofRectangle& stageRect,
                    const float& messageDuration,
                    const ofPixels& pixels, vector<string> messages);
-        void update();
+        void update(const ofRectangle& stageRect);
         void draw();
-        
-        const ofRectangle& getContainerRectangle(){
-            return drawRect;
-        }
     };
 }

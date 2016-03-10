@@ -33,8 +33,8 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
 }
 
 
-void hlct::InfoScreen::update(){
-
+void hlct::InfoScreen::update(const ofRectangle& stageRect){
+    this->stageRect.set(stageRect);
     timer->update(HLCT_ANIM_UPDATE_CYCLE);
     
     int idx = (int)timer->getCurrentValue();
@@ -42,7 +42,6 @@ void hlct::InfoScreen::update(){
         idx--;
     }
     this->msgIndex = idx;
-    
     auto t = texts[msgIndex];
     
     float imgW = image.getWidth();
@@ -52,11 +51,11 @@ void hlct::InfoScreen::update(){
     float tx = (rw - t.getWidth())/2;
     float ty = rectImage.getTop() + rectImage.getHeight() + 140;
     
-    this->rectImage.set((rw-imgW)/2,
-                        (rh-imgH)/2 - 100,
+    this->rectImage.set(stageRect.getX() + (rw-imgW)/2,
+                        stageRect.getY() + (rh-imgH)/2 - 100,
                         imgW, imgH);
-    this->rectParagraph.set(tx, ty, t.getWidth(), t.getHeight());
-    this->drawRect.set(tx, rectImage.getTop(), t.getWidth(), imgH + rectImage.getHeight());
+    this->rectParagraph.set(stageRect.getX() + tx, stageRect.getY() + ty, t.getWidth(), t.getHeight());
+//    this->drawRect.set(tx, rectImage.getTop(), t.getWidth(), imgH + rectImage.getHeight());
 }
 
 
