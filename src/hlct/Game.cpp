@@ -33,6 +33,8 @@ void hlct::Game::setup(const ofRectangle& rect){
     this->resize(rect);
     setupInfoScreens(rect);
     
+    background.setup(rect, imgPack.background->getPixels());
+    
     helmets.clear();
     
     state = GAME_STATE_TITLE;
@@ -159,6 +161,8 @@ void hlct::Game::update(){
     
     ofRectangle stageRect(stagePos.get(), stageWidth.get(), stageHeight.get());
     
+    background.setStageRectangle(stageRect);
+    
     if (useOsc){
         while (receiver.hasWaitingMessages()){
             
@@ -281,7 +285,7 @@ void hlct::Game::updateHelmets(const ofRectangle& stageRect){
 
 void hlct::Game::draw(){
     ofRectangle stageRect(stagePos.get(), stageWidth.get(), stageHeight.get());
-    imgPack.background->draw(stageRect);
+    background.draw(stageRect);
     
     switch (state){
         case GAME_STATE_TITLE:

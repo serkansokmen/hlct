@@ -11,6 +11,7 @@
 #include "GameState.h"
 #include "InfoScreen.h"
 #include "LivesDisplay.h"
+#include "StageBackground.h"
 #include "Constants.h"
 
 
@@ -84,12 +85,13 @@ namespace hlct {
         void setupInfoScreens(const ofRectangle& rect);
         void drawLoadingBar(const ofRectangle& rect, const float& width);
         
-        std::map<string, InfoScreen> screens;
+        std::map<string, hlct::InfoScreen> screens;
         
+        hlct::ImagePack             imgPack;
         hlct::Hero                  hero;
         hlct::GameState             state;
         hlct::LivesDisplay          livesDisplay;
-        hlct::ImagePack             imgPack;
+        hlct::StageBackground       background;
         
         ofxAnimatableFloat          gameStartTimer, gameTimer, gameEndTimer;
         ofRectangle                 loadingBarRect;
