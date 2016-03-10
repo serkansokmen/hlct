@@ -86,6 +86,7 @@ Desktop.ini
 bin/*.exe
 bin/*.exp
 bin/*.lib
+bin/*.dll
 *.vc.opendb
 !bin/data/
 
