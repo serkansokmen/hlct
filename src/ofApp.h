@@ -22,4 +22,5 @@ public:
     hlct::Game game;
     ofxPanel   gui;
     bool       bDrawGui;
+    bool       bHideCursor;
 };
