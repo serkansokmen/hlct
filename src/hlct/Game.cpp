@@ -61,6 +61,8 @@ void hlct::Game::setup(const ofRectangle& rect){
     stageParams.add(stagePos.set("Top Left", ofVec2f(HLCT_CLAMP_STAGE, 40), ofVec2f::zero(), ofGetWindowRect().getBottomRight()));
     stageParams.add(stageWidth.set("Width", ofGetWidth() - HLCT_CLAMP_STAGE * 2, ofGetWidth()/2, ofGetWidth()*2));
     stageParams.add(stageHeight.set("Height", ofGetHeight() - 200, ofGetHeight()/2, ofGetHeight()*2));
+    stageParams.add(dropX.set("Drop Left", 0, 0, ofGetWidth()/2));
+    stageParams.add(dropWidth.set("Drop Width", 0, 0, ofGetWidth()));
     stageParams.add(loadingBarOffsetBottom.set("Loadingbar Offset", 120, -500, 500));
     
     ofParameterGroup alignParams;
@@ -312,6 +314,13 @@ void hlct::Game::draw(){
             for (auto h : helmets){
                 h->draw(bDebug);
             }
+            if (bDebug){
+                ofPushStyle();
+                ofNoFill();
+                ofSetColor(ofColor::purple);
+                ofDrawRectangle(stagePos.get().x + dropX, stagePos.get().y, dropWidth, stageHeight);
+                ofPopStyle();
+            }
             livesDisplay.draw(stageRect, livesLeft, scaleLive);
             break;
         }
@@ -392,7 +401,8 @@ void hlct::Game::endGame(){
 void hlct::Game::addRandomHelmet(){
     shared_ptr<Helmet> helmet = shared_ptr<Helmet>(new Helmet);
     helmetSection = (int)ofRandom(0, HLCT_HELMET_SECTION_COUNT);
-    helmet->setup(ofRectangle(stagePos.get(), stageWidth.get(), stageHeight.get()),
+    ofVec2f hPos(stagePos.get().x + dropX, stagePos.get().y);
+    helmet->setup(ofRectangle(hPos, dropWidth.get(), stageHeight.get()),
                   imgPack.bait->getPixels(), helmetSection);
     helmets.push_back(helmet);
 }

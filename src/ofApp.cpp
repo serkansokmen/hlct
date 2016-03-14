@@ -65,6 +65,14 @@ void ofApp::keyPressed(int key){
     if (key == 'P') {
         game.bPaused = !game.bPaused;
     }
+    if (key == 'm') {
+        bHideCursor = !bHideCursor;
+        if (bHideCursor) {
+            ofHideCursor();
+        } else {
+            ofShowCursor();
+        }
+    }
 }
 
 //--------------------------------------------------------------
