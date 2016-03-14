@@ -244,8 +244,8 @@ void hlct::Game::update(){
             gameEndTimer.update(HLCT_ANIM_UPDATE_CYCLE);
             if (!gameEndTimer.isAnimating()){
                 state = GAME_STATE_TITLE;
-                bUserPosing = false;
-                bUserExists = false;
+                bUserExists = bUserExists;
+                bUserPosing = bUserPosing;
             }
         }
             break;
