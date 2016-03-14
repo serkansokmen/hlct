@@ -136,6 +136,8 @@ namespace hlct {
         ofParameter<ofVec2f>    stagePos;
         ofParameter<float>      stageWidth;
         ofParameter<float>      stageHeight;
+        ofParameter<float>      dropX;
+        ofParameter<float>      dropWidth;
         ofParameter<float>      loadingBarOffsetBottom;
         
         ofParameter<float>  scaleHero;
