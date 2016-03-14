@@ -133,7 +133,7 @@ void hlct::Game::setupInfoScreens(const ofRectangle& rect){
     messages.clear();
     msg = "YOU WIN!";
     messages.push_back(msg);
-    msg = "YOU ARE IN SAFE NOW!";
+    msg = "YOU ARE SAFE NOW!";
     messages.push_back(msg);
     screenWin.setup(rect,
                     HLCT_INFO_SCREEN_DURATION,
