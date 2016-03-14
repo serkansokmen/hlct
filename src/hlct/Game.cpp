@@ -61,6 +61,7 @@ void hlct::Game::setup(const ofRectangle& rect){
     stageParams.add(stagePos.set("Top Left", ofVec2f(HLCT_CLAMP_STAGE, 40), ofVec2f::zero(), ofGetWindowRect().getBottomRight()));
     stageParams.add(stageWidth.set("Width", ofGetWidth() - HLCT_CLAMP_STAGE * 2, ofGetWidth()/2, ofGetWidth()*2));
     stageParams.add(stageHeight.set("Height", ofGetHeight() - 200, ofGetHeight()/2, ofGetHeight()*2));
+    stageParams.add(loadingBarOffsetBottom.set("Loadingbar Offset", 120, -500, 500));
     
     ofParameterGroup alignParams;
     alignParams.setName("Scaling and Alignment");
@@ -132,7 +133,7 @@ void hlct::Game::setupInfoScreens(const ofRectangle& rect){
     messages.clear();
     msg = "YOU WIN!";
     messages.push_back(msg);
-    msg = "YOU ARE IN SAFE NOW!";
+    msg = "YOU ARE SAFE NOW!";
     messages.push_back(msg);
     screenWin.setup(rect,
                     HLCT_INFO_SCREEN_DURATION,
@@ -243,8 +244,8 @@ void hlct::Game::update(){
             gameEndTimer.update(HLCT_ANIM_UPDATE_CYCLE);
             if (!gameEndTimer.isAnimating()){
                 state = GAME_STATE_TITLE;
-                bUserPosing = false;
-                bUserExists = false;
+                bUserExists = bUserExists;
+                bUserPosing = bUserPosing;
             }
         }
             break;
