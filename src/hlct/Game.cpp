@@ -61,6 +61,7 @@ void hlct::Game::setup(const ofRectangle& rect){
     stageParams.add(stagePos.set("Top Left", ofVec2f(HLCT_CLAMP_STAGE, 40), ofVec2f::zero(), ofGetWindowRect().getBottomRight()));
     stageParams.add(stageWidth.set("Width", ofGetWidth() - HLCT_CLAMP_STAGE * 2, ofGetWidth()/2, ofGetWidth()*2));
     stageParams.add(stageHeight.set("Height", ofGetHeight() - 200, ofGetHeight()/2, ofGetHeight()*2));
+    stageParams.add(loadingBarOffsetBottom.set("Loadingbar Offset", 120, -500, 500));
     
     ofParameterGroup alignParams;
     alignParams.setName("Scaling and Alignment");

@@ -24,7 +24,7 @@ void hlct::InfoScreen::setup(const ofRectangle& stageRect,
         t.init(HLCT_INFO_SCREEN_FONT_PATH, HLCT_INFO_SCREEN_FONT_SIZE);
         t.setText(msg);
         t.setColor(255, 255, 255, 255);
-        t.wrapTextX(stageRect.getWidth()/2);
+        t.wrapTextX(stageRect.getWidth()*0.65);
         this->texts.push_back(t);
     }
     
@@ -52,7 +52,7 @@ void hlct::InfoScreen::update(const ofRectangle& stageRect){
     float ty = rectImage.getTop() + rectImage.getHeight();
     
     this->rectImage.set(stageRect.getX() + (rw-imgW)/2,
-                        stageRect.getY() + (rh-imgH)/2 - 100,
+                        stageRect.getY() + (rh-imgH)/2 - 200,
                         imgW, imgH);
     this->rectParagraph.set(stageRect.getX() + tx, stageRect.getY() + ty, t.getWidth(), t.getHeight());
 //    this->drawRect.set(tx, rectImage.getTop(), t.getWidth(), imgH + rectImage.getHeight());

@@ -26,7 +26,6 @@
 #define HLCT_INFO_SCREEN_FONT_SIZE      75                          // info screen font size
 #define HLCT_INFO_SCREEN_DURATION       2                           // seconds for info screen message switch timer
 #define HLCT_INFO_SCREEN_FONT_NAME      "kollektif_bold_85"         // used internally
-#define HLCT_LOADING_BAR_OFFSET_BOTTOM  40
 
 // Scale min/max
 #define HLCT_HERO_SCALE_MIN             .5f

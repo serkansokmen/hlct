@@ -79,7 +79,7 @@ namespace hlct {
         
         inline void resizeLoadingBar(const ofRectangle& stageRect){
             loadingBarRect.setFromCenter(stageRect.getCenter(), 400, 25);
-            loadingBarRect.setY(stageRect.getBottom() - HLCT_LOADING_BAR_OFFSET_BOTTOM);
+            loadingBarRect.setY(stageRect.getBottom() - loadingBarOffsetBottom);
         };
         
         void setupInfoScreens(const ofRectangle& rect);
@@ -136,6 +136,7 @@ namespace hlct {
         ofParameter<ofVec2f>    stagePos;
         ofParameter<float>      stageWidth;
         ofParameter<float>      stageHeight;
+        ofParameter<float>      loadingBarOffsetBottom;
         
         ofParameter<float>  scaleHero;
         ofParameter<float>  scaleBait;
